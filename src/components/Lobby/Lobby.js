@@ -5,6 +5,7 @@ import { socket } from "../../index";
 
 import CreateRoom from "./CreateRoom/CreateRoom";
 import JoinRoom from "./JoinRoom/JoinRoom";
+import { Redirect } from "react-router-dom";
 
 const Lobby = props => {
 	const [acceptedRoomID, setAcceptedRoomID] = useState(null);
@@ -13,14 +14,19 @@ const Lobby = props => {
 	const [showJoinRoom, toggleShowJoinRoom] = useState(false);
 	const [showCreateRoom, toggleShowCreateRoom] = useState(false);
 	const [opponentJoined, setOpponentJoined] = useState(false);
-	// const [gameStatus, setGameStatus] = useState(null);
+	const [gameRedirectPath, setGameRedirectPath] = useState(null);
 
 	useEffect(() => {
+		console.log("cdm");
+		socket.on("player_joined", () => {
+			setOpponentJoined(true);
+			console.log("set");
+		});
 
-		socket.on('player_joined', () => {
-			setOpponentJoined(true)
-			console.log("set")
-		})
+		socket.on("start_game_ack", room => {
+			console.log("ack_received");
+			setGameRedirectPath(`/quiz/${room}`);
+		});
 	}, []);
 
 	const changeJoinRoomID = event => {
@@ -29,18 +35,19 @@ const Lobby = props => {
 	};
 
 	const joinRoomHandler = () => {
+		toggleShowCreateRoom(false)
 		toggleShowJoinRoom(true);
 	};
 
 	const submitJoinRoomHandler = event => {
-		event.preventDefault()
+		event.preventDefault();
 		setLoading(true);
 		console.log("Submit Join Room");
 		socket.emit("join_room", joinRoomID, response => {
 			if (response.status === "Success") {
 				// setOpponentJoined(true);
 				setLoading(false);
-				console.log(response.roomID)
+				console.log(response.roomID);
 			} else {
 				console.log("Room creation Error");
 				// Invalid Room id
@@ -91,10 +98,15 @@ const Lobby = props => {
 			</div>
 		);
 
+	const quizRedirect = gameRedirectPath ? <Redirect to={gameRedirectPath} /> : null;
+
 	return (
 		<>
+			{quizRedirect}
 			<button onClick={joinRoomHandler}>Join Room</button>
-			<button onClick={createRoomHandler} disabled={showCreateRoom}>Create Room</button>
+			<button onClick={createRoomHandler} disabled={showCreateRoom}>
+				Create Room
+			</button>
 			{loading ? Spinner : room}
 		</>
 	);
