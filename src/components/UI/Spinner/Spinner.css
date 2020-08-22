@@ -1,0 +1,133 @@
+/* Container */
+.spinner {
+	box-sizing: border-box;
+	height: 60px;
+	width: 60px;
+	position: relative;
+}
+
+/* Spinner Individual Circles */
+.spinner div {
+	height: 20px;
+	box-sizing: border-box;
+	position: absolute;
+	width: 20px;
+	border-radius: 50%;
+	background-color: var(--spinner-clr);
+}
+
+.activeCircle {
+	background-color: var(--spinner-active-clr) !important;
+	animation: activeCircle 3s infinite;
+}
+
+.circle1,
+.activeCircle {
+	top: 0;
+	left: 0;
+	transform: translate(0%, 0%);
+}
+
+.circle1 {
+	animation: circle1 3s infinite;
+}
+
+.circle2 {
+	top: 0;
+	right: 0;
+	transform: translate(0%, 0%);
+	animation: circle2 3s infinite;
+}
+
+.circle3 {
+	bottom: 0;
+	right: 0;
+	transform: translate(0%, 0%);
+	animation: circle3 3s infinite;
+}
+
+/* Animations */
+
+@keyframes activeCircle {
+	8.33% {
+		transform: translate(0%, 200%);
+	}
+	16.67% {
+		transform: translate(200%, 200%);
+	}
+	25% {
+		transform: translate(200%, 0%);
+	}
+	33.33% {
+		transform: translate(0%, 0%);
+	}
+	41.67% {
+		transform: translate(0%, 200%);
+	}
+	50% {
+		transform: translate(200%, 200%);
+	}
+	58.33% {
+		transform: translate(200%, 0%);
+	}
+	66.67% {
+		transform: translate(0%, 0%);
+	}
+	75% {
+		transform: translate(0%, 200%);
+	}
+	83.33% {
+		transform: translate(200%, 200%);
+	}
+	91.67% {
+		transform: translate(200%, 0%);
+	}
+	100% {
+		transform: translate(0%, 0%);
+	}
+}
+
+@keyframes circle1 {
+	25% {
+		transform: translate(200%, 0%);
+	}
+	50% {
+		transform: translate(200%, 200%);
+	}
+	75% {
+		transform: translate(0%, 200%);
+	}
+	100% {
+		transform: translate(0%, 0%);
+	}
+}
+
+@keyframes circle2 {
+	16.67% {
+		transform: translate(0%, 200%);
+	}
+	41.67% {
+		transform: translate(-200%, 200%);
+	}
+	66.67% {
+		transform: translate(-200%, 0%);
+	}
+	91.67% {
+		transform: translate(0%, 0%);
+	}
+}
+
+@keyframes circle3 {
+	8.33% {
+		transform: translate(-200%, 0%);
+	}
+	33.33% {
+		transform: translate(-200%, -200%);
+	}
+	58.33% {
+		transform: translate(0%, -200%);
+	}
+	83.33% {
+		transform: translate(0%, 0%);
+	}
+}
