@@ -1,5 +1,5 @@
 const axios = require("axios");
-const {decodeHtml} = require('./utils')
+const { decodeHtml } = require("./utils");
 
 class Quiz {
 	constructor(players, roomID, quizOptions) {
@@ -21,47 +21,63 @@ class Quiz {
 
 	fetchQuestions() {
 		const url = `https://opentdb.com/api.php?amount=${this.nQuestions}&category=${this.category}&difficulty=${this.difficulty}&type=multiple`;
-		// console.log("url", url);
-		// console.log("Promise");
-		// return
+
 		return axios.get(url);
 	}
 
-	getNextQuestion(player) {
-		if (!this.currentQues) {
-			// console.log("Fetching Questions")
-			return this.fetchQuestions().then(response => {
-				// console.log(response.data)
-				this.questions = response.data.results;
-				// console.log("Questions fetched");
-				return this.getQuestion(player);
-			});
-		} else return this.getQuestion(player);
+	async getNextQuestion(player) {
+		if (!this.currentAnswer) {
+			console.log("Fetching Questions");
+
+			const response = await this.fetchQuestions();
+			const questions = response.data.results;
+			this.questions = questions;
+			// return this.fetchQuestions()
+			// 	.then(response => {
+			// 		// console.log(response.data)
+			// 		this.questions = response.data.results;
+			// 		// console.log("Questions fetched");
+			// 		return this.getQuestion(player);
+			// 	})
+			// 	.catch(err => console.log("ERROR", err));
+		}
+		return this.getQuestion(player);
 	}
 
-	getScore(currPlayer) {
-		let myScore, opponentScore;
-		for (const player in this.players) {
-			if (player === currPlayer)
-				myScore = this.players[player].score
-			else
-				opponentScore= this.players[player].score
-		}
+	getScore() {
+		// let myScore, opponentScore;
+		// myScore = this.players[currPlayer].score;
 
-		return {myScore,opponentScore}
+		// const opponent = Object.keys(this.players).filter(
+		// 	player => player !== currPlayer
+		// );
+		// opponentScore = this.players[opponent[0]].score;
+
+		// Object.keys(this.players).map(player=>)
+		const score = {};
+		// const players=Object.keys(this.players)
+		for (const player in this.players) {
+			score[player] = this.players[player].score;
+		}
+		return score;
 	}
 
 	getQuestion(player) {
 		if (this.currentQuesIdx === this.nQuestions) {
-			console.log("Quiz Finished");
-			// const score = this.score[player];
-			const {myScore,opponentScore} = getScore(player)
-			return { status: "Questions_Finished", myScore,opponentScore };
+			// console.log("Quiz Finished");
+			// // const score = this.score[player];
+			// console.log(typeof player,player.id,this.players)
+			const score = this.getScore();
+			// console.log("Final Score", score);
+			// const obj = { status: "Questions_Finished", score };
+			// console.log(obj);
+			return { status: "Questions_Finished", score };
 			// Evaluate Results and send
 		}
+		// console.log("Getting Question");
 
 		const currentQues = this.questions[this.currentQuesIdx++];
-		this.currentAnswer = decodeHtml(currentQues.correct_answer)
+		this.currentAnswer = decodeHtml(currentQues.correct_answer);
 		const undecodedChoices = this.shuffleChoices([
 			...currentQues.incorrect_answers,
 			currentQues.correct_answer,
@@ -70,10 +86,7 @@ class Quiz {
 
 		const question = decodeHtml(undecodedQuestion);
 		const choices = undecodedChoices.map(choice => decodeHtml(choice));
-
-		// const decodedQuestion = decodeURIComponent(questions)
-		console.log(question);
-		// console.log("Return value", question,choices)
+		this.resetPlayersTime(this.players);
 		return { status: "Success", question, choices };
 	}
 	shuffleChoices(choices) {
@@ -96,13 +109,25 @@ class Quiz {
 		return choices;
 	}
 
-	checkAnswer(player, answer) {
-		if (this.answer === player) {
-			console.log("Updating Score")
-			this.players[player].score++;
+	resetPlayersTime(players) {
+		const currrentTime = new Date().getTime();
+		for (const player in players) {
+			players[player].time = currrentTime;
 		}
 	}
-	
+
+	checkAnswer(player, answer) {
+		// console.log(this.currentAnswer, answer);
+		if (this.currentAnswer === answer) {
+			// console.log("Updating Score");
+			const currentTime = new Date().getTime();
+			const duration = 3000; //milliseconds
+			const scoreIncrement =
+				parseInt((1 - (currentTime - this.players[player].time) / duration) * 100)
+			console.log(scoreIncrement)
+			this.players[player].score += scoreIncrement;
+		}
+	}
 }
 
 class QuizManager {
@@ -130,9 +155,9 @@ class QuizManager {
 		// const players = {
 		// 	...Object.keys(players).map(player => new Player(roomID, player == host)),
 		// };
-		console.log(`${roomID} quiz added`);
-		console.log("Quizzes", this.quizzes);
-		console.log("Players", this.players);
+		// console.log(`${roomID} quiz added`);
+		// console.log("Quizzes", this.quizzes);
+		// console.log("Players", this.players);
 	}
 
 	getQuiz(roomID) {
@@ -156,6 +181,7 @@ class Player {
 		this.score = 0;
 		this.roomID = roomID;
 		this.isHost = isHost;
+		this.time = null;
 	}
 }
 

@@ -28,20 +28,39 @@ io.on("connection", socket => {
 	});
 
 	socket.on("submit_answer", answer => {
+		// console.log("asnwer event ", answer);
 		const quiz = quizManager.getQuizByPlayer(socket.id);
-		if (quiz && quiz.players[socket.id].isHost) quiz.checkAnswer(socket.id, answer);
+		if (quiz) quiz.checkAnswer(socket.id, answer);
 	});
 
-	socket.on("get_next_question", () => {
+	// socket.on("get_score", (_,updateScore) => {
+	// 	const player = socket.id;
+	// 	const quiz = quizManager.getQuizByPlayer(player);
+	// 	const score = quiz.getScore(player);
+	// 	updateScore(score)
+	// })
+
+	socket.on("get_next_question", async () => {
 		const player = socket.id;
 		const quiz = quizManager.getQuizByPlayer(player);
-		if (quiz && quiz.players[player].isHost)
-			quiz.getNextQuestion(socket).then(question => {
-				console.log(`Sending Question to Room ${quiz.room}`);
-				io.to(quiz.room).emit("next_question", question);
-				const score = quiz.getScore(player);
-				io.to(quiz.room).emit("update_score", score);
-			});
+		if (quiz && quiz.players[player].isHost) {
+			// console.log("emitting events");
+			const question = await quiz.getNextQuestion(player);
+			io.to(quiz.room).emit("next_question", question);
+			const score = quiz.getScore(player);
+			io.to(quiz.room).emit("update_score", score);
+			// quiz.getNextQuestion(socket).then(question => {
+			// 	// console.log(`Sending Question to Room ${quiz.room}`);
+			// 	// console.log("quiz line#40", quiz);
+			// 	// console.log("question response", question);
+			// 	io.to(quiz.room).emit("next_question", question);
+
+			// 	// console.log("quiz line#42", quiz);
+			// 	const score = quiz.getScore(player);
+			// 	// console.log("score", score);
+			// 	io.to(quiz.room).emit("update_score", score);
+			// });
+		}
 	});
 	socket.on("start_game", quizConfig => {
 		//Handle Errors
@@ -53,7 +72,7 @@ io.on("connection", socket => {
 				io.to(roomID).emit("start_game_ack", roomID);
 			}
 			const players = room.sockets;
-			console.log(socket.rooms);
+			// console.log(socket.rooms);
 			const host = socket.id;
 			quizManager.addQuiz(players, roomID, quizOptions, host);
 		}
