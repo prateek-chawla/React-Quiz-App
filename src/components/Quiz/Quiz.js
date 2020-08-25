@@ -29,7 +29,9 @@ const Quiz = props => {
 				console.log("ERROR");
 			}
 		});
-		// if (isHost) {
+		socket.on('player_left', score => {
+			console.log("Player Left - Final Score: ", score)
+		})
 
 		return () => {
 			console.log("Cleared Interval on Unmount");

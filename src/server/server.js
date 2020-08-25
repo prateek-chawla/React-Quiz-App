@@ -59,6 +59,16 @@ io.on("connection", socket => {
 			quizManager.addQuiz(players, roomID, quizOptions, host);
 		}
 	});
+
+	socket.on("disconnecting", () => {
+		const player = socket.id;
+		const quiz = quizManager.getQuizByPlayer(socket.id);
+		if (quiz) {
+			const score = quiz.getScore();
+			io.to(quiz.room).emit("opponent_left", score);
+			quizManager.cleanup(quiz);
+		}
+	});
 });
 
 server.listen(PORT, () => console.log("**** Socket IO ****"));

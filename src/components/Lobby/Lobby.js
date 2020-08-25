@@ -16,16 +16,24 @@ const Lobby = props => {
 	const [opponentJoined, setOpponentJoined] = useState(false);
 	const [gameRedirectPath, setGameRedirectPath] = useState(null);
 
+
 	useEffect(() => {
 		console.log("cdm");
 		socket.on("player_joined", () => {
 			setOpponentJoined(true);
-			console.log("set");
+			// console.log("set");
 		});
 
 		socket.on("start_game_ack", room => {
-			console.log("ack_received");
-			setGameRedirectPath(`/quiz/${room}`);
+			// console.log("ack_received");
+			setGameRedirectPath(`/quiz`);
+		});
+
+
+		socket.on("opponent_left", finalScore => {
+			// dispatch set Score
+			setGameRedirectPath('/result')
+
 		});
 	}, []);
 
@@ -47,7 +55,7 @@ const Lobby = props => {
 			if (response.status === "Success") {
 				// setOpponentJoined(true);
 				setLoading(false);
-				console.log(response.roomID);
+				// console.log(response.roomID);
 			} else {
 				console.log("Room creation Error");
 				// Invalid Room id
@@ -66,7 +74,7 @@ const Lobby = props => {
 
 		socket.emit("create_room", roomID, response => {
 			if (response.status === "Success") {
-				console.log(`Room Created ${response.roomID}`);
+				// console.log(`Room Created ${response.roomID}`);
 				setAcceptedRoomID(response.roomID);
 				setLoading(false);
 				toggleShowCreateRoom(true);

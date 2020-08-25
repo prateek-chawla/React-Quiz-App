@@ -1,5 +1,5 @@
-const Player = require('./player')
-const Quiz = require('./quiz')
+const Player = require("./player");
+const Quiz = require("./quiz");
 
 class QuizManager {
 	constructor() {
@@ -34,6 +34,19 @@ class QuizManager {
 		}
 		//Handle errors
 		else return null;
+	}
+
+	cleanup(quiz) {
+		console.log("Before Cleanup");
+		console.log(this.quizzes);
+		console.log(this.players);
+		for (const player in quiz.players) {
+			delete this.players[player];
+		}
+		delete this.quizzes[quiz.room];
+		console.log("After Cleanup");
+		console.log(this.quizzes);
+		console.log(this.players);
 	}
 }
 
