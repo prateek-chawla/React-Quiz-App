@@ -16,34 +16,32 @@ const Lobby = props => {
 	const [opponentJoined, setOpponentJoined] = useState(false);
 	const [gameRedirectPath, setGameRedirectPath] = useState(null);
 
-
 	useEffect(() => {
-		console.log("cdm");
 		socket.on("player_joined", () => {
 			setOpponentJoined(true);
+			// dispatch setopoonenLEft
 			// console.log("set");
 		});
 
 		socket.on("start_game_ack", room => {
+			// dispatch set quiz in progress
+			// dispatch set room
 			// console.log("ack_received");
 			setGameRedirectPath(`/quiz`);
 		});
 
-
 		socket.on("opponent_left", finalScore => {
 			// dispatch set Score
-			setGameRedirectPath('/result')
-
+			setGameRedirectPath("/result");
 		});
 	}, []);
 
 	const changeJoinRoomID = event => {
-		// console.log(event.target.value);
 		setJoinRoomID(event.target.value);
 	};
 
 	const joinRoomHandler = () => {
-		toggleShowCreateRoom(false)
+		toggleShowCreateRoom(false);
 		toggleShowJoinRoom(true);
 	};
 
@@ -112,9 +110,7 @@ const Lobby = props => {
 		<>
 			{quizRedirect}
 			<button onClick={joinRoomHandler}>Join Room</button>
-			<button onClick={createRoomHandler} disabled={showCreateRoom}>
-				Create Room
-			</button>
+			<button onClick={createRoomHandler}>Create Room</button>
 			{loading ? Spinner : room}
 		</>
 	);

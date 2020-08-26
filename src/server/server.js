@@ -11,13 +11,16 @@ const quizManager = new QuizManager();
 
 io.on("connection", socket => {
 	socket.on("create_room", (room, callback) => {
-		// Handle Error Here
-		socket.join(room, () => {
-			callback({
-				status: "Success",
-				roomID: room,
+		try {
+			if (io.sockets.adapter.rooms[room]) {
+				throw "Error in Creating Room"
+			}
+			socket.join(room, () => {
+				callback({ status: "Success", roomID: room });
 			});
-		});
+		} catch (error) {
+			callback({ status: "Failed", message: error });
+		}
 	});
 
 	socket.on("join_room", (room, callback) => {
@@ -44,7 +47,7 @@ io.on("connection", socket => {
 			io.to(quiz.room).emit("update_score", score);
 		}
 	});
-	socket.on("start_game", quizConfig => {
+	socket.on("start_quiz", quizConfig => {
 		const { roomID, ...quizOptions } = quizConfig;
 		if (io.sockets.adapter.rooms[roomID]) {
 			const room = io.sockets.adapter.rooms[roomID];
@@ -53,7 +56,7 @@ io.on("connection", socket => {
 				// Handle Error Here
 				return "error";
 			}
-			io.to(roomID).emit("start_game_ack", roomID);
+			io.to(roomID).emit("start_quiz_ack", roomID);
 			const players = room.sockets;
 			const host = socket.id;
 			quizManager.addQuiz(players, roomID, quizOptions, host);

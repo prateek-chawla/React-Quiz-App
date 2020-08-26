@@ -1,10 +1,38 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
+
 import { socket } from "../../../index";
+import { generateRoomID } from "../../../utils/room";
+
+import Spinner from "../../UI/Spinner/Spinner";
+import ErroModal from "../../UI/Error/Error";
 
 const CreateRoom = props => {
+	const [roomID, setRoomID] = useState(null);
 	const [category, setCategory] = useState("20");
 	const [difficulty, setDifficulty] = useState("medium");
 	const [nQuestions, setNQuestions] = useState(5);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(null);
+
+	useEffect(() => {
+		const generatedRoomID = generateRoomID();
+		setRoomID(generatedRoomID);
+
+		socket.emit("create_room", roomID, response => {
+			if (response.status === "Success") {
+				setLoading(false);
+				setError(null);
+			} else {
+				setError(response.message);
+				setLoading(false);
+			}
+		});
+
+		socket.on("player_joined", () => {
+			props.setOpponentJoined();
+		});
+	}, []);
 
 	const updateCategory = event => {
 		setCategory(event.target.value);
@@ -17,49 +45,64 @@ const CreateRoom = props => {
 	};
 
 	const startQuizHandler = () => {
-		const quizConfig = {
-			roomID: props.roomID,
-			category,
-			difficulty,
-			nQuestions,
-		};
-		socket.emit("start_game", quizConfig);
+		const quizConfig = { roomID, category, difficulty, nQuestions };
+		socket.emit("start_quiz", quizConfig);
 	};
-	return (
-		<div>
-			<div>Room id {props.roomID}</div>
-			<div>opponent joined : {props.opponentJoined.toString()}</div>
 
-			<label>
-				Select Category:
-				<select value={category} onChange={updateCategory}>
-					<option value="20">Mythology</option>
-					<option value="21">Sports</option>
-					<option value="11">Movies</option>
-					<option value="9">General Knowledge</option>
-				</select>
-			</label>
-			<label>
-				Select Number Of Questions:
-				<select value={nQuestions} onChange={updateNQuestions}>
-					<option value="5">5</option>
-					<option value="10">10</option>
-					<option value="15">15</option>
-				</select>
-			</label>
-			<label>
-				Select Difficulty Level:
-				<select value={difficulty} onChange={updateDifficulty}>
-					<option value="easy">Easy</option>
-					<option value="medium">Medium</option>
-					<option value="hard">Hard</option>
-				</select>
-			</label>
-			<button disabled={!props.opponentJoined} onClick={startQuizHandler}>
-				Start Quiz
-			</button>
-		</div>
+	const errorModal = error ? <ErroModal message={error} /> : null;
+	return (
+		<>
+			{errorModal}
+			{loading ? (
+				<Spinner />
+			) : (
+				<div>
+					<div>Room id {roomID}</div>
+					<div>opponent joined : {props.opponentJoined.toString()}</div>
+
+					<label>
+						Select Category:
+						<select value={category} onChange={updateCategory}>
+							<option value="20">Mythology</option>
+							<option value="21">Sports</option>
+							<option value="11">Movies</option>
+							<option value="9">General Knowledge</option>
+						</select>
+					</label>
+					<label>
+						Select Number Of Questions:
+						<select value={nQuestions} onChange={updateNQuestions}>
+							<option value="5">5</option>
+							<option value="10">10</option>
+							<option value="15">15</option>
+						</select>
+					</label>
+					<label>
+						Select Difficulty Level:
+						<select value={difficulty} onChange={updateDifficulty}>
+							<option value="easy">Easy</option>
+							<option value="medium">Medium</option>
+							<option value="hard">Hard</option>
+						</select>
+					</label>
+					<button disabled={!props.opponentJoined} onClick={startQuizHandler}>
+						Start Quiz
+					</button>
+				</div>
+			)}
+		</>
 	);
 };
 
-export default CreateRoom;
+const mapStateToProps = state => {
+	return {
+		opponentJoined: state.opponentJoined,
+	};
+};
+
+const mapDispatchToProps = dispatch => {
+	return {
+		setOpponentJoined: () => dispatch(actions.setOpponentJoined()),
+	};
+};
+export default connect(mapStateToProps, mapDispatchToProps)(CreateRoom);
