@@ -1,16 +1,15 @@
 import React from "react";
+import { connect } from "react-redux";
 
 import { getResult } from "../../utils/score";
 
 const Result = props => {
-	let { myScore, opponentScore, resultMsg } = getResult(
-		props.score,
-		props.playerID
-    );
+	const { score, playerID, opponentLeft } = props;
+	let { myScore, opponentScore, resultMsg } = getResult(score, playerID);
 
-    if (props.opponentLeft) {
-        resultMsg='OpponentLeft'
-    }
+	if (opponentLeft) {
+		resultMsg = "OpponentLeft";
+	}
 
 	return (
 		<div>
@@ -21,4 +20,11 @@ const Result = props => {
 	);
 };
 
-export default Result;
+const mapStateToProps = state => {
+	return {
+		score: state.score,
+		playerID: state.playerID,
+		opponentLeft: state.opponentLeft,
+	};
+};
+export default connect(mapStateToProps)(Result);

@@ -2,8 +2,8 @@ export const formatScore = (inputScore, playerID) => {
 	const opponent = Object.keys(inputScore).filter(player => player !== playerID);
 
 	const score = {
-		myScore: score[playerID],
-		opponentScore: score[opponent],
+		myScore: inputScore[playerID],
+		opponentScore: inputScore[opponent],
 	};
 	return score;
 };

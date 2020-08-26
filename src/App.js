@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
-import { connect } from "react-router-dom";
+import { connect } from "react-redux";
 import { Route, Switch, Redirect } from "react-router-dom";
+
+import { socket } from "./index";
 
 import "./App.css";
 
@@ -8,20 +10,28 @@ import Lobby from "./components/Lobby/Lobby";
 import Quiz from "./components/Quiz/Quiz";
 import Result from "./components/Result/Result";
 
-import * as actions from './store/actions/actions'
+import * as actions from "./store/actions/actions";
 
-const app = props => {
+const App = props => {
+	const { startQuiz, updateScore, setOpponentLeft, history } = props;
+
 	useEffect(() => {
 		socket.on("start_game_ack", room => {
-			props.startQuiz(room)
-			props.history.push(`/quiz`);
+			startQuiz(room);
+			history.push(`/quiz`);
 		});
 
 		socket.on("opponent_left", finalScore => {
-			props.updateScore(finalScore)
-			props.setOpponentLeft()
-			props.history.push("/result");
+			updateScore(finalScore);
+			setOpponentLeft();
+			history.push("/result");
 		});
+
+		return () => {
+			socket.off("start_game_ack")
+			socket.off("opponent_left")
+		}
+		//eslint-disable-next-line
 	}, []);
 
 	return (
@@ -40,7 +50,6 @@ const mapDispatchToProps = dispatch => {
 		setOpponentLeft: () => dispatch(actions.setOpponentLeft()),
 		startQuiz: roomID => dispatch(actions.startQuiz(roomID)),
 	};
-}
+};
 
-
-export default connect(null,mapDispatchToProps)(app)
+export default connect(null, mapDispatchToProps)(App);

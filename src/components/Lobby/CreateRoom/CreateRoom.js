@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 
 import { socket } from "../../../index";
 import { generateRoomID } from "../../../utils/room";
 
 import Spinner from "../../UI/Spinner/Spinner";
-import ErroModal from "../../UI/Error/Error";
+import ErrorModal from "../../UI/Error/Error";
+
+import * as actions from "../../../store/actions/actions";
 
 const CreateRoom = props => {
 	const [roomID, setRoomID] = useState(null);
@@ -32,6 +34,10 @@ const CreateRoom = props => {
 		socket.on("player_joined", () => {
 			props.setOpponentJoined();
 		});
+
+		return () => {
+			socket.off("player_joined");
+		};
 	}, []);
 
 	const updateCategory = event => {
@@ -49,7 +55,7 @@ const CreateRoom = props => {
 		socket.emit("start_quiz", quizConfig);
 	};
 
-	const errorModal = error ? <ErroModal message={error} /> : null;
+	const errorModal = error ? <ErrorModal message={error} /> : null;
 	return (
 		<>
 			{errorModal}

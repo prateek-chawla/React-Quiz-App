@@ -10,12 +10,12 @@ import { socket } from "../../../index";
 import * as actions from "../../../store/actions/actions";
 
 const JoinRoom = props => {
-	const [roomID, changeRoomID] = useState("");
+	const [roomID, setRoomID] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 
 	const changeRoomID = event => {
-		changeRoomID(event.target.value);
+		setRoomID(event.target.value);
 	};
 
 	const submitJoinRoomHandler = event => {
