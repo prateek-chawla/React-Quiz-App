@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 
 import { connect } from "react-redux";
 
@@ -14,6 +14,20 @@ const JoinRoom = props => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 
+	const { startQuiz, history } = props;
+
+	useEffect(() => {
+		socket.on("start_quiz_ack", room => {
+			startQuiz(room);
+			history.push(`/quiz`);
+		});
+
+		return () => {
+			socket.off("start_quiz_ack");
+		};
+		//eslint-disable-next-line
+	}, []);
+
 	const changeRoomID = event => {
 		setRoomID(event.target.value);
 	};
@@ -27,7 +41,6 @@ const JoinRoom = props => {
 				setLoading(false);
 				setError(null);
 			} else {
-				console.log("Room creation Error");
 				setError(response.message);
 				setLoading(false);
 			}
@@ -53,12 +66,9 @@ const JoinRoom = props => {
 	);
 };
 
-// const mapStateToProps = state => {
-// 	return {};
-// };
-
 const mapDispatchToProps = dispatch => {
 	return {
+		startQuiz: roomID => dispatch(actions.startQuiz(roomID)),
 		setIsHost: () => dispatch(actions.setIsHost(false)),
 	};
 };

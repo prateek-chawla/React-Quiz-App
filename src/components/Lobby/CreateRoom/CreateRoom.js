@@ -17,28 +17,40 @@ const CreateRoom = props => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 
+	const { setOpponentJoined, startQuiz, history } = props;
+
 	useEffect(() => {
 		const generatedRoomID = generateRoomID();
 		setRoomID(generatedRoomID);
 
-		socket.emit("create_room", roomID, response => {
-			if (response.status === "Success") {
-				setLoading(false);
-				setError(null);
-			} else {
-				setError(response.message);
-				setLoading(false);
-			}
+		socket.on("player_joined", () => {
+			setOpponentJoined();
 		});
 
-		socket.on("player_joined", () => {
-			props.setOpponentJoined();
+		socket.on("start_quiz_ack", room => {
+			startQuiz(room);
+			history.push(`/quiz`);
 		});
 
 		return () => {
+			socket.off("start_quiz_ack");
 			socket.off("player_joined");
 		};
+		//eslint-disable-next-line
 	}, []);
+
+	useEffect(() => {
+		if (roomID)
+			socket.emit("create_room", roomID, response => {
+				if (response.status === "Success") {
+					setLoading(false);
+					setError(null);
+				} else {
+					setError(response.message);
+					setLoading(false);
+				}
+			});
+	}, [roomID]);
 
 	const updateCategory = event => {
 		setCategory(event.target.value);
@@ -108,6 +120,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
+		startQuiz: roomID => dispatch(actions.startQuiz(roomID)),
 		setOpponentJoined: () => dispatch(actions.setOpponentJoined()),
 	};
 };

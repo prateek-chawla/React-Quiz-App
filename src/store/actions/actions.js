@@ -23,3 +23,11 @@ export const updateScore = score => {
 export const startQuiz = roomID => {
 	return { type: actionTypes.START_QUIZ, roomID };
 };
+
+export const endQuiz = () => {
+	return { type: actionTypes.END_QUIZ };
+};
+
+export const resetQuiz = () => {
+	return { type: actionTypes.RESET_QUIZ };
+};

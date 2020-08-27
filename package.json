@@ -26,7 +26,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "nodemon src/server/server"
+    "server": "nodemon server/server",
+    "//": "app script is only for Windows",
+    "app" : "start npm start && start npm run server"
   },
   "eslintConfig": {
     "extends": "react-app"

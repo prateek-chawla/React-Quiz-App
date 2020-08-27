@@ -3,11 +3,12 @@ import * as actionTypes from "../actions/actionTypes";
 const initialState = {
 	playerID: null,
 	roomID: null,
-	opponentJoined: null,
+	opponentJoined: false,
 	opponentLeft: null,
-	score: null,
+	score: { myScore: 0, opponentScore: 0 },
 	isHost: true,
 	quizInProgress: false,
+	showResults: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -32,6 +33,7 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				opponentLeft: true,
+				showResults: true,
 				quizInProgress: false,
 			};
 		case actionTypes.START_QUIZ:
@@ -40,11 +42,19 @@ const reducer = (state = initialState, action) => {
 				roomID: action.roomID,
 				quizInProgress: true,
 			};
+		case actionTypes.END_QUIZ:
+			return {
+				...state,
+				showResults: true,
+				quizInProgress: false,
+			};
 		case actionTypes.UPDATE_SCORE:
 			return {
 				...state,
 				score: action.score,
 			};
+		case actionTypes.RESET_QUIZ:
+			return initialState;
 		default:
 			return state;
 	}
