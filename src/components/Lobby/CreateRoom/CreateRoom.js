@@ -23,9 +23,9 @@ const CreateRoom = props => {
 		const generatedRoomID = generateRoomID();
 		setRoomID(generatedRoomID);
 
-		socket.on("player_joined", () => {
-			setOpponentJoined();
-		});
+		socket.on("player_joined", () => setOpponentJoined(true));
+
+		socket.on("opponent_left", () => setOpponentJoined(false));
 
 		socket.on("start_quiz_ack", room => {
 			startQuiz(room);
@@ -35,6 +35,7 @@ const CreateRoom = props => {
 		return () => {
 			socket.off("start_quiz_ack");
 			socket.off("player_joined");
+			socket.off("opponent_left");
 		};
 		//eslint-disable-next-line
 	}, []);
@@ -121,7 +122,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
 	return {
 		startQuiz: roomID => dispatch(actions.startQuiz(roomID)),
-		setOpponentJoined: () => dispatch(actions.setOpponentJoined()),
+		setOpponentJoined: opponentJoined => dispatch(actions.setOpponentJoined(opponentJoined)),
 	};
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CreateRoom);

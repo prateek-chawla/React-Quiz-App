@@ -15,21 +15,21 @@ const Quiz = props => {
 
 	const playerID = socket.id;
 
-	const fetchQuestionInterval = useRef(null);
+	const fetchMoreQuestionsTimeout = useRef(null);
 	const {
 		quizInProgress,
 		score,
 		setOpponentLeft,
 		endQuiz,
 		updateScore,
+		isHost,
 		history,
 	} = props;
 
 	useEffect(() => {
-
 		if (!quizInProgress) setHomeRedirect(true);
 
-		fetchQuestionInterval.current = setInterval(getNextQuestion, 3000);
+		if (isHost) getNextQuestion();
 
 		socket.on("next_question", response => {
 			if (response.status === "Success") {
@@ -38,7 +38,8 @@ const Quiz = props => {
 				setLoading(false);
 			} else if (response.status === "Questions_Finished") {
 				setLoading(false);
-				clearInterval(fetchQuestionInterval.current);
+				setQuestion(null);
+
 				endQuiz();
 				history.push("/result");
 			} else {
@@ -62,10 +63,18 @@ const Quiz = props => {
 			socket.off("opponent_left");
 			socket.off("next_question");
 			socket.off("update_score");
-			clearInterval(fetchQuestionInterval.current);
+			clearTimeout(fetchMoreQuestionsTimeout.current);
 		};
 		//eslint-disable-next-line
 	}, []);
+
+	useEffect(() => {
+		if (isHost) {
+			if (question)
+				fetchMoreQuestionsTimeout.current = setTimeout(getNextQuestion, 3000);
+			return () => clearTimeout(fetchMoreQuestionsTimeout.current);
+		}
+	}, [question]);
 
 	const getNextQuestion = () => {
 		socket.emit("get_next_question");
@@ -89,6 +98,7 @@ const mapStateToProps = state => {
 	return {
 		quizInProgress: state.quizInProgress,
 		score: state.score,
+		isHost: state.isHost,
 	};
 };
 

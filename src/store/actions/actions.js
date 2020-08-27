@@ -1,7 +1,10 @@
 import * as actionTypes from "./actionTypes";
 
-export const setOpponentJoined = () => {
-	return { type: actionTypes.OPPONENT_JOINED };
+export const setOpponentJoined = opponentJoined => {
+	return {
+		type: actionTypes.SET_OPPONENT_JOINED,
+		opponentJoined,
+	};
 };
 
 export const setOpponentLeft = () => {

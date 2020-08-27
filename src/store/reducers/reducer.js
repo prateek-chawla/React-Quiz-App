@@ -13,10 +13,10 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
 	switch (action.type) {
-		case actionTypes.OPPONENT_JOINED:
+		case actionTypes.SET_OPPONENT_JOINED:
 			return {
 				...state,
-				opponentJoined: true,
+				opponentJoined: action.opponentJoined,
 				isHost: true,
 			};
 		case actionTypes.SET_ROOM_ID:

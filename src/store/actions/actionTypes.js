@@ -5,6 +5,6 @@ export const RESET_QUIZ = "RESET_QUIZ";
 export const QUIZ_REDIRECT = "QUIZ_REDIRECT";
 export const RESULT_REDIRECT = "RESULT_REDIRECT";
 export const OPPONENT_LEFT = "OPPONENT_LEFT";
-export const OPPONENT_JOINED = "OPPONENT_JOINED";
+export const SET_OPPONENT_JOINED = "OPPONENT_JOINED";
 export const SET_ROOM_ID = "SET_ROOM_ID";
 export const SET_IS_HOST = "SET_IS_HOST";

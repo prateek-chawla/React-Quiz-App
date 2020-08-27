@@ -5,8 +5,8 @@ import { connect } from "react-redux";
 import { getResult } from "../../utils/score";
 
 const Result = props => {
-	const { score, playerID, opponentLeft, showResults } = props;
-	let { myScore, opponentScore, resultMsg } = getResult(score, playerID);
+	const { score, opponentLeft, showResults } = props;
+	let { myScore, opponentScore, resultMsg } = getResult(score);
 
 	if (opponentLeft) {
 		resultMsg = "OpponentLeft";

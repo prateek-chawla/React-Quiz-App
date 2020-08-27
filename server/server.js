@@ -13,10 +13,11 @@ io.on("connection", socket => {
 	socket.on("create_room", (room, callback) => {
 		try {
 			if (io.sockets.adapter.rooms[room]) {
-				throw "Error in Creating Room"
+				throw "Error in Creating Room";
 			}
 			socket.join(room, () => {
 				callback({ status: "Success", roomID: room });
+				socket.quizRoom = room;
 			});
 		} catch (error) {
 			callback({ status: "Failed", message: error });
@@ -27,20 +28,21 @@ io.on("connection", socket => {
 		if (io.sockets.adapter.rooms[room]) {
 			socket.join(room, () => {
 				callback({ status: "Success", roomID: room });
+				socket.quizRoom = room;
 				socket.to(room).emit("player_joined");
 			});
 		} else callback({ status: "Failed", message: "Room Doesn't Exist" });
 	});
 
 	socket.on("submit_answer", answer => {
-		const quiz = quizManager.getQuizByPlayer(socket.id);
+		const quiz = quizManager.getQuiz(socket.quizRoom);
 		if (quiz) quiz.checkAnswer(socket.id, answer);
 	});
 
 	socket.on("get_next_question", async () => {
 		const player = socket.id;
-		const quiz = quizManager.getQuizByPlayer(player);
-		if (quiz && quiz.players[player].isHost) {
+		const quiz = quizManager.getQuiz(socket.quizRoom);
+		if (quiz) {
 			const question = await quiz.getNextQuestion(player);
 			io.to(quiz.room).emit("next_question", question);
 			const score = quiz.getScore(player);
@@ -64,13 +66,16 @@ io.on("connection", socket => {
 	});
 
 	socket.on("disconnecting", () => {
-		const player = socket.id;
-		const quiz = quizManager.getQuizByPlayer(socket.id);
+		const room = socket.quizRoom;
+		const quiz = quizManager.getQuiz(socket.quizRoom);
 		if (quiz) {
 			const score = quiz.getScore();
-			io.to(quiz.room).emit("opponent_left", score);
+			io.to(room).emit("opponent_left", score);
 			quizManager.cleanup(quiz);
+		} else {
+			io.to(room).emit("opponent_left");
 		}
+		socket.quizRoom = null;
 	});
 });
 
