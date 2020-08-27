@@ -24,13 +24,18 @@ io.on("connection", socket => {
 		}
 	});
 
-	socket.on("join_room", (room, callback) => {
-		if (io.sockets.adapter.rooms[room]) {
-			socket.join(room, () => {
-				callback({ status: "Success", roomID: room });
-				socket.quizRoom = room;
-				socket.to(room).emit("player_joined");
-			});
+	socket.on("join_room", (roomID, callback) => {
+		const room = io.sockets.adapter.rooms[roomID];
+		if (room) {
+			if (room.length === 1)
+				socket.join(roomID, () => {
+					callback({ status: "Success", roomID });
+					socket.quizRoom = room;
+					socket.to(roomID).emit("player_joined");
+				});
+			else {
+				callback({ status: "Failed", message: "Room Already has Two Members" });
+			}
 		} else callback({ status: "Failed", message: "Room Doesn't Exist" });
 	});
 

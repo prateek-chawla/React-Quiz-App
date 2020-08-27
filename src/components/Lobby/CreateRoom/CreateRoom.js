@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 import { socket } from "../../../index";
 import { generateRoomID } from "../../../utils/room";
@@ -72,6 +73,8 @@ const CreateRoom = props => {
 	return (
 		<>
 			{errorModal}
+			<Link to="/">Lobby</Link>
+			<Link to="/join-room">Join Room Instead</Link>
 			{loading ? (
 				<Spinner />
 			) : (
@@ -122,7 +125,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
 	return {
 		startQuiz: roomID => dispatch(actions.startQuiz(roomID)),
-		setOpponentJoined: opponentJoined => dispatch(actions.setOpponentJoined(opponentJoined)),
+		setOpponentJoined: opponentJoined =>
+			dispatch(actions.setOpponentJoined(opponentJoined)),
 	};
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CreateRoom);

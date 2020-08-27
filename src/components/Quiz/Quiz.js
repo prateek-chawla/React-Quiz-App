@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import { socket } from "../../index";
 import Question from "./Question/Question";
 
@@ -83,6 +83,7 @@ const Quiz = props => {
 	return (
 		<>
 			{homeRedirect && <Redirect to="/" />}
+			<Link to="/">Lobby</Link>
 			<div>
 				<div>Quiz</div>
 				{loading ? "Loading...." : null}

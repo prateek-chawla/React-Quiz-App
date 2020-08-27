@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 import { getResult } from "../../utils/score";
@@ -16,6 +16,7 @@ const Result = props => {
 	return (
 		<>
 			{homeRedirect}
+			<Link to="/">Play Again</Link>
 			<div>
 				<div> Your Score {myScore}</div>
 				<div> Opponent Score {opponentScore}</div>
