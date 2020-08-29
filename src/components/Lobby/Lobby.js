@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 
 import * as actions from "../../store/actions/actions";
 
+import styles from "./Lobby.module.css";
+
 const Lobby = props => {
 	const { resetQuiz } = props;
 
