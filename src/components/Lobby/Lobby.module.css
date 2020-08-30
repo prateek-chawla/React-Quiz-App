@@ -1,3 +1,32 @@
-body{
-    background: #1e1e1e;
+.lobby {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+    height: 100%;
+    opacity: 0.9;
+}
+
+.logoContainer {
+	flex-grow: 3;
+	display: flex;
+	align-items: flex-end;
+}
+
+.buttonsContainer {
+	flex-grow: 2;
+	display: flex;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+}
+
+.buttonsContainer a {
+	margin-top: 0.7rem;
+    margin-left: 1.2rem;
+    opacity: 0;
+    animation: appear 0.5s ease-in 2s forwards;
+}
+
+@keyframes appear{
+    to{opacity: 0.9;}
 }

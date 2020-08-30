@@ -1,0 +1,26 @@
+.logoContainer{
+    opacity: 0;
+}
+
+.animateStroke {
+	animation: animate-stroke 1.8s ease forwards;
+}
+
+.animateFill {
+	animation: animate-fill 0.6s ease forwards;
+}
+
+@keyframes animate-stroke {
+	to {
+		stroke-dashoffset: 0;
+	}
+}
+
+@keyframes animate-fill {
+	from {
+		fill: transparent;
+	}
+	to {
+		fill: ivory;
+	}
+}

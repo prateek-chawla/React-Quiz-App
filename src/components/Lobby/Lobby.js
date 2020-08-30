@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+
+import Logo from "../UI/Logo/Logo";
 import Button from "../UI/Button/Button";
 
 import * as actions from "../../store/actions/actions";
@@ -15,14 +17,19 @@ const Lobby = props => {
 	}, [resetQuiz]);
 
 	return (
-		<>
-			<Link to="/create-room">
-				<Button>Create Room</Button>
-			</Link>
-			<Link to="/join-room">
-				<Button>Join Room</Button>
-			</Link>
-		</>
+		<div className={styles.lobby}>
+			<div className={styles.logoContainer}>
+				<Logo />
+			</div>
+			<div className={styles.buttonsContainer}>
+				<Link to="/create-room">
+					<Button>Create Room</Button>
+				</Link>
+				<Link to="/join-room">
+					<Button>Join Room</Button>
+				</Link>
+			</div>
+		</div>
 	);
 };
 
