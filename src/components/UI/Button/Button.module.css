@@ -1,58 +1,92 @@
-.button {
-	display: inline-block;
-	position: relative;
+*:focus {
 	outline: none;
-	height: 3rem;
-	width: 11rem;
+}
+
+.buttonContainer {
+	position: relative;
+	display: inline-block;
+}
+
+.button {
+	height: 2.5rem;
+	width: 10rem;
 	border: none;
+	border-radius: 2rem;
 	background: transparent;
 	color: ivory;
-	padding: 0;
-	transition: all 0.4s;
-}
-
-.buttonCircle {
-	border-radius: 50%;
-	position: relative;
-	background: ivory;
-	height: 2.8rem;
-	line-height: 2.8rem;
-	width: 2.8rem;
-	border: none;
-	color: #1e1e1e;
-	font-size: 1.5rem;
-	transition: all 0.4s cubic-bezier(0.23, 0.77, 0.73, 0.99);
-}
-
-.buttonText {
+	overflow: hidden;
 	position: absolute;
 	top: 50%;
 	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.button span {
+	display: inline-block;
+	position: relative;
+	left: 0.3rem;
+	font-size: 0.8rem;
+	transition: all 0.4s ease 0.1s;
+}
+
+.buttonText {
 	text-transform: uppercase;
-	transition: all 0.2s ease;
-	transform: translate(-48%, -50%);
-	font-size: 1.1rem;
-	width: 100%;
+	text-align: left;
+	letter-spacing: 1px;
+}
+
+.leftAngle,
+.rightAngle {
+	width: 0.7rem;
+}
+
+.rightAngle {
+	opacity: 0;
 }
 
 .button:hover {
 	cursor: pointer;
 }
 
-.button:hover .buttonCircle {
-	width: 100%;
-	border-radius: 1.5rem;
+.button:hover .buttonText,
+.button:hover .leftAngle,
+.button:hover .rightAngle {
+	transform: translate3d(-0.7rem, 0, 0);
 }
 
-.button:hover .buttonCircle .buttonIcon {
+.button:hover .rightAngle {
+	opacity: 1;
+}
+.button:hover .leftAngle {
 	opacity: 0;
-}
-
-.button:hover .buttonText {
-	color: #1e1e1e;
 }
 
 .button:disabled {
 	cursor: not-allowed;
 	opacity: 0.5;
+}
+
+#buttonOutline {
+	stroke-dasharray: 365 0;
+	stroke-dashoffset: 0;
+}
+.outlineRect {
+	fill: none;
+	stroke: ivory;
+	stroke-width: 2;
+}
+
+.button:hover + .buttonOutline {
+	animation: animate-btn-stroke 0.8s;
+}
+
+@keyframes animate-btn-stroke {
+	0% {
+		stroke-dasharray: 100 265;
+		stroke-dashoffset: 0;
+	}
+	100% {
+		stroke-dasharray: 365 0;
+		stroke-dashoffset: 365;
+	}
 }

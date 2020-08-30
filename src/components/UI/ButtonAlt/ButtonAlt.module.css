@@ -1,0 +1,58 @@
+.button {
+	display: inline-block;
+	position: relative;
+	outline: none;
+	height: 3rem;
+	width: 11rem;
+	border: none;
+	background: transparent;
+	color: ivory;
+	padding: 0;
+	transition: all 0.4s;
+}
+
+.buttonCircle {
+	border-radius: 50%;
+	position: relative;
+	background: ivory;
+	height: 2.8rem;
+	line-height: 2.8rem;
+	width: 2.8rem;
+	border: none;
+	color: #1e1e1e;
+	font-size: 1.5rem;
+	transition: all 0.4s cubic-bezier(0.23, 0.77, 0.73, 0.99);
+}
+
+.buttonText {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	text-transform: uppercase;
+	transition: all 0.2s ease;
+	transform: translate(-48%, -50%);
+	font-size: 1.1rem;
+	width: 100%;
+}
+
+.button:hover {
+	cursor: pointer;
+}
+
+.button:hover .buttonCircle {
+	width: 100%;
+	border-radius: 1.5rem;
+}
+
+.button:hover .buttonCircle .buttonIcon {
+	opacity: 0;
+}
+
+.button:hover .buttonText {
+	color: #1e1e1e;
+}
+
+.button:disabled {
+	cursor: not-allowed;
+	opacity: 0.5;
+}

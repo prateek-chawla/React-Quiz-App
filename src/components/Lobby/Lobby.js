@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import Button from "../UI/Button/Button";
 
 import * as actions from "../../store/actions/actions";
 
@@ -12,18 +14,14 @@ const Lobby = props => {
 		resetQuiz();
 	}, [resetQuiz]);
 
-	const joinRoomHandler = () => {
-		props.history.push("/join-room");
-	};
-
-	const createRoomHandler = () => {
-		props.history.push("./create-room");
-	};
-
 	return (
 		<>
-			<button onClick={joinRoomHandler}>Join Room</button>
-			<button onClick={createRoomHandler}>Create Room</button>
+			<Link to="/create-room">
+				<Button>Create Room</Button>
+			</Link>
+			<Link to="/join-room">
+				<Button>Join Room</Button>
+			</Link>
 		</>
 	);
 };
