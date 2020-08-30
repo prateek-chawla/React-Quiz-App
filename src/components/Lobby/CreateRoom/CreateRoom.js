@@ -6,6 +6,7 @@ import { socket } from "../../../index";
 import { generateRoomID } from "../../../utils/room";
 
 import Spinner from "../../UI/Spinner/Spinner";
+import Modal from "../../UI/Modal/Modal";
 import ErrorModal from "../../UI/Error/Error";
 
 import * as actions from "../../../store/actions/actions";
@@ -71,10 +72,8 @@ const CreateRoom = props => {
 
 	const errorModal = error ? <ErrorModal message={error} /> : null;
 	return (
-		<>
+		<Modal closed={props.closed} showModal={props.showModal}>
 			{errorModal}
-			<Link to="/">Lobby</Link>
-			<Link to="/join-room">Join Room Instead</Link>
 			{loading ? (
 				<Spinner />
 			) : (
@@ -112,7 +111,7 @@ const CreateRoom = props => {
 					</button>
 				</div>
 			)}
-		</>
+		</Modal>
 	);
 };
 
@@ -125,8 +124,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
 	return {
 		startQuiz: roomID => dispatch(actions.startQuiz(roomID)),
-		setOpponentJoined: opponentJoined =>
-			dispatch(actions.setOpponentJoined(opponentJoined)),
+		setOpponentJoined: opponentJoined => dispatch(actions.setOpponentJoined(opponentJoined)),
 	};
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CreateRoom);

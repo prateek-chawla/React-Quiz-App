@@ -18,13 +18,13 @@
 	width: 100%;
 	justify-content: center;
 	align-items: center;
+	opacity: 0;
+	animation: appear 0.5s ease-in 2s forwards;
+	margin-top: 0.5rem;
 }
 
-.buttonsContainer a {
-	margin-top: 0.7rem;
+.buttonsContainer div {
     margin-left: 1.2rem;
-    opacity: 0;
-    animation: appear 0.5s ease-in 2s forwards;
 }
 
 @keyframes appear{

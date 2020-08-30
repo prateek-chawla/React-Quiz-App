@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
+import Modal from "../../UI/Modal/Modal";
 import Spinner from "../../UI/Spinner/Spinner";
 import ErrorModal from "../../UI/Error/Error";
 
@@ -59,12 +60,10 @@ const JoinRoom = props => {
 	let errorModal = error ? <ErrorModal message={error} /> : null;
 
 	return (
-		<>
+		<Modal closed={props.closed} showModal={props.showModal}>
 			{errorModal}
-			<Link to="/">Lobby</Link>
-			<Link to="/create-room">Create Room Instead</Link>
 			{loading ? <Spinner /> : joinRoomForm}
-		</>
+		</Modal>
 	);
 };
 
