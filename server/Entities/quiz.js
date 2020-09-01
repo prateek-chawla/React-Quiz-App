@@ -7,8 +7,8 @@ class Quiz {
 
 		// Default Options
 		this.nQuestions = quizOptions.nQuestions || 5;
-		this.difficulty = quizOptions.difficulty || "medium";
-		this.category = quizOptions.category || 20;
+		// this.difficulty = quizOptions.difficulty || "medium";
+		this.category = quizOptions.category || 10; // Default - Books
 
 		this.questions = null;
 		this.currentQuesIdx = 0;
@@ -17,8 +17,8 @@ class Quiz {
 	}
 
 	fetchQuestions() {
-		const baseUrl = "https://opentdb.com/api.php?";
-		const url = `${baseUrl}amount=${this.nQuestions}&category=${this.category}&difficulty=${this.difficulty}&type=multiple`;
+		const baseUrl = "https://opentdb.com/api.php?difficulty=medium&type=multiple&";
+		const url = `${baseUrl}amount=${this.nQuestions}&category=${this.category}`;
 		return axios.get(url);
 	}
 
@@ -76,12 +76,12 @@ class Quiz {
 			const currentTime = new Date().getTime();
 			const duration = 3000; //milliseconds
 
-			const baseScore = 40 // atleast 40 points for a correct answer
+			const baseScore = 40; // atleast 40 points for a correct answer
 			const speedScore = parseInt(
 				(1 - (currentTime - this.players[player].time) / duration) * 60
 			); // 60 variable points based on how fast the question was answered
 
-			const scoreIncrement = baseScore+speedScore
+			const scoreIncrement = baseScore + speedScore;
 			this.players[player].score += scoreIncrement;
 		}
 	}

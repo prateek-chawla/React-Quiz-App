@@ -84,10 +84,10 @@ const CreateRoom = props => {
 					<label>
 						Select Category:
 						<select value={category} onChange={updateCategory}>
-							<option value="20">Mythology</option>
+							<option value="10">Books</option>
 							<option value="21">Sports</option>
 							<option value="11">Movies</option>
-							<option value="9">General Knowledge</option>
+							<option value="29">Comics</option>
 						</select>
 					</label>
 					<label>

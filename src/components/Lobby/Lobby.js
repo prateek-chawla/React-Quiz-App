@@ -37,10 +37,6 @@ const Lobby = props => {
 		setShowCreateRoom(false);
 	};
 
-	// const createRoomModal = <CreateRoom showModal={showCreateRoom} closed={closeModal} />;
-	// const joinRoomModal = <JoinRoom showModal={showJoinRoom} closed={closeModal} />;
-	// const roomModal = showCreateRoom ? createRoomModal : showJoinRoom ? joinRoomModal : null;
-
 	return (
 		<div className={styles.lobby}>
 			<CreateRoom showModal={showCreateRoom} closed={closeModal} />

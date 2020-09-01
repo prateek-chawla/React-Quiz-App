@@ -1,0 +1,42 @@
+.closeButton {
+	background-color: transparent;
+	border-radius: 50%;
+	height: 30px;
+	width: 30px;
+	position: relative;
+	border: 3px solid #7e7e7e;
+	left: calc(100% - 2rem);
+}
+
+.left,
+.right {
+	height: 3px;
+	width: 20px;
+	background-color: #7e7e7e;
+	transition: transform 0.3s ease;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	border-radius: 30%;
+}
+
+.left {
+	transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.right {
+	transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.closeButton:hover {
+	background-color: #7e7e7e;
+	cursor: pointer;
+}
+.closeButton:hover .left {
+	transform: translate(-50%, -50%) rotate(-45deg);
+	background-color: ivory;
+}
+.closeButton:hover .right {
+	transform: translate(-50%, -50%) rotate(45deg);
+	background-color: ivory;
+}

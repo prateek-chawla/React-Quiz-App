@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 import Modal from "../../UI/Modal/Modal";
 import Spinner from "../../UI/Spinner/Spinner";
+import Button from "../../UI/Button/Button"
 import ErrorModal from "../../UI/Error/Error";
 
 import { socket } from "../../../index";
 
 import * as actions from "../../../store/actions/actions";
+import styles from "./JoinRoom.module.css";
 
 const JoinRoom = props => {
 	const [roomID, setRoomID] = useState("");
@@ -49,19 +50,21 @@ const JoinRoom = props => {
 	};
 
 	let joinRoomForm = (
-		<div>
-			<form onSubmit={submitJoinRoomHandler}>
-				<input type="text" onChange={changeRoomID} value={roomID} required />
-				<button type="submit">Join Room</button>
-			</form>
-		</div>
+		<form onSubmit={submitJoinRoomHandler}>
+			<input type="text" onChange={changeRoomID} value={roomID} required />
+			<Button type="submit" clicked={submitJoinRoomHandler}>
+				Join Room
+			</Button>
+		</form>
 	);
 
 	let errorModal = error ? <ErrorModal message={error} /> : null;
 
 	return (
 		<Modal closed={props.closed} showModal={props.showModal}>
+			{/* <Spinner /> */}
 			{errorModal}
+			{console.log(loading)}
 			{loading ? <Spinner /> : joinRoomForm}
 		</Modal>
 	);
