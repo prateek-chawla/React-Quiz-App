@@ -5,7 +5,6 @@ const Logo = () => {
 	const logoRef = useRef(null);
 
 	useEffect(() => {
-		console.log("Logo Mounted", logoRef.current);
 		const logo = logoRef.current;
 		const animateLogo = () => {
 			logo.style.opacity = 1;

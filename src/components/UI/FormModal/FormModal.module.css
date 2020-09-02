@@ -132,7 +132,7 @@ input[type="radio"] + label:hover {
 .top.successCard {
 	background-color: #43a047 !important;
 }
-.successCard:hover{
+.successCard:hover {
 	cursor: pointer;
 }
 
@@ -147,6 +147,23 @@ input[type="radio"] + label:hover {
 	border-right: 1px solid;
 	flex-grow: 1;
 }
-.roomCard{
+.roomCard {
 	flex-direction: row !important;
+}
+
+.errorSlider {
+	height: 60px;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 0 2rem;
+	padding-bottom: 0.8rem;
+	border-top-left-radius: 1rem;
+	border-top-right-radius: 1rem;
+	background-color: firebrick;
+	color: ivory;
+	line-height: 48px;
+	position: absolute;
+	top: 0;
+	z-index: 400;
+	transition: all 0.3s ease-in-out;
 }

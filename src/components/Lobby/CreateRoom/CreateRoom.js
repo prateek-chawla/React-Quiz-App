@@ -6,9 +6,7 @@ import { socket } from "../../../index";
 import { generateRoomID } from "../../../utils/room";
 import { joinClasses, copyToClipboard } from "../../../utils/general";
 
-import Spinner from "../../UI/Spinner/Spinner";
 import FormModal from "../../UI/FormModal/FormModal";
-import ErrorModal from "../../UI/Error/Error";
 import ModalButton from "../../UI/FormModal/Button/Button";
 
 import * as actions from "../../../store/actions/actions";
@@ -18,7 +16,6 @@ const CreateRoom = props => {
 	const [roomID, setRoomID] = useState(null);
 	const [category, setCategory] = useState("20");
 	const [nQuestions, setNQuestions] = useState(5);
-	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 
 	const topCard = useRef(null);
@@ -26,9 +23,6 @@ const CreateRoom = props => {
 	const { setOpponentJoined, startQuiz, history, showModal, closed } = props;
 
 	useEffect(() => {
-		const generatedRoomID = generateRoomID();
-		setRoomID(generatedRoomID);
-
 		socket.on("player_joined", () => {
 			setOpponentJoined(true);
 			unstackCard();
@@ -52,13 +46,8 @@ const CreateRoom = props => {
 	useEffect(() => {
 		if (roomID)
 			socket.emit("create_room", roomID, response => {
-				if (response.status === "Success") {
-					setLoading(false);
-					setError(null);
-				} else {
-					setError(response.message);
-					setLoading(false);
-				}
+				if (response.status === "Success") setError(null);
+				else setError(response.message);
 			});
 	}, [roomID]);
 
@@ -87,10 +76,14 @@ const CreateRoom = props => {
 		topCard.current = nextCard;
 	};
 
-	const errorModal = error ? <ErrorModal message={error} /> : null;
-
 	return (
-		<FormModal title="Create Room" showModal={showModal} closed={closed}>
+		<FormModal
+			title="Create Room"
+			showModal={showModal}
+			closed={closed}
+			error={error}
+			cleanup={() => setError(null)}
+		>
 			<div ref={topCard} className={styles.top}>
 				<div className={styles.message}>Pick A Category</div>
 				<div onChange={updateCategory} className={styles.inputGroup}>
