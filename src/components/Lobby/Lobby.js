@@ -39,7 +39,7 @@ const Lobby = props => {
 		<div className={styles.lobby}>
 			{/* {showCreateRoom && <CreateRoom showModal={showCreateRoom} closed={closeModal} />} */}
 			<CreateRoom showModal={showCreateRoom} closed={closeModal} />
-			{/* {showJoinRoom && <JoinRoom showModal={showJoinRoom} closed={closeModal} />} */}
+			{showJoinRoom && <JoinRoom showModal={showJoinRoom} closed={closeModal} />}
 			{/* <JoinRoom showModal={showJoinRoom} closed={closeModal} /> */}
 			<div className={styles.logoContainer} style={blurred}>
 				<Logo />

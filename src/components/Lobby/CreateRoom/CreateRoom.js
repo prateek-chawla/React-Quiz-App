@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 
 import { socket } from "../../../index";
 import { generateRoomID } from "../../../utils/room";
-import { joinClasses } from "../../../utils/general";
+import { joinClasses, copyToClipboard } from "../../../utils/general";
 
 import Spinner from "../../UI/Spinner/Spinner";
 import FormModal from "../../UI/FormModal/FormModal";
 import ErrorModal from "../../UI/Error/Error";
+import ModalButton from "../../UI/FormModal/Button/Button";
 
 import * as actions from "../../../store/actions/actions";
 import styles from "../../UI/FormModal/FormModal.module.css";
@@ -66,6 +68,7 @@ const CreateRoom = props => {
 	};
 	const updateNQuestions = event => {
 		setNQuestions(event.target.value);
+		setRoomID(generateRoomID());
 		unstackCard();
 	};
 
@@ -112,9 +115,14 @@ const CreateRoom = props => {
 					<label htmlFor="nQuestions-15">15</label>
 				</div>
 			</div>
-			<div className={styles.stacked}>
+			<div className={joinClasses(styles.stacked, styles.roomCard)}>
 				<div className={styles.message}>Share this Room ID </div>
 				<div className={joinClasses(styles.inputGroup, styles.room)}>{roomID}</div>
+				{document.queryCommandSupported("copy") && (
+					<ModalButton clicked={() => copyToClipboard(roomID)} icon="copy">
+						Copy
+					</ModalButton>
+				)}
 			</div>
 			<div
 				onClick={startQuizHandler}
@@ -138,4 +146,4 @@ const mapDispatchToProps = dispatch => {
 		setOpponentJoined: opponentJoined => dispatch(actions.setOpponentJoined(opponentJoined)),
 	};
 };
-export default connect(mapStateToProps, mapDispatchToProps)(CreateRoom);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CreateRoom));

@@ -5,6 +5,7 @@ const Logo = () => {
 	const logoRef = useRef(null);
 
 	useEffect(() => {
+		console.log("Logo Mounted", logoRef.current);
 		const logo = logoRef.current;
 		const animateLogo = () => {
 			logo.style.opacity = 1;
@@ -21,10 +22,8 @@ const Logo = () => {
 			logo.classList.add(styles.animateFill);
 			logo.style.animationDelay = `${++delay}s`;
 		};
-		logoRef.current.addEventListener("load", animateLogo);
-		return () => {
-			logo.removeEventListener("load", animateLogo);
-		};
+
+		animateLogo();
 	}, []);
 
 	return (

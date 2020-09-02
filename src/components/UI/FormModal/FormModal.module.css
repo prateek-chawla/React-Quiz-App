@@ -129,8 +129,11 @@ input[type="radio"] + label:hover {
 	cursor: pointer;
 }
 
-.successCard {
-	background-color: #43a047;
+.top.successCard {
+	background-color: #43a047 !important;
+}
+.successCard:hover{
+	cursor: pointer;
 }
 
 .successCard .inputGroup {
@@ -141,4 +144,9 @@ input[type="radio"] + label:hover {
 .room {
 	font-size: 2rem;
 	align-items: center;
+	border-right: 1px solid;
+	flex-grow: 1;
+}
+.roomCard{
+	flex-direction: row !important;
 }
