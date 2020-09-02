@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 
 import CreateRoom from "./CreateRoom/CreateRoom";
 import JoinRoom from "./JoinRoom/JoinRoom";
 import Logo from "../UI/Logo/Logo";
 import Button from "../UI/Button/Button";
-import Modal from "../UI/Modal/Modal";
 
 import * as actions from "../../store/actions/actions";
 
@@ -23,7 +21,6 @@ const Lobby = props => {
 	}, [resetQuiz]);
 
 	const createRoomClicked = () => {
-		console.log("clicked");
 		setShowCreateRoom(true);
 		setShowJoinRoom(false);
 	};
@@ -37,14 +34,17 @@ const Lobby = props => {
 		setShowCreateRoom(false);
 	};
 
+	const blurred = showCreateRoom || showJoinRoom ? { filter: "blur(15px)" } : null;
 	return (
 		<div className={styles.lobby}>
+			{/* {showCreateRoom && <CreateRoom showModal={showCreateRoom} closed={closeModal} />} */}
 			<CreateRoom showModal={showCreateRoom} closed={closeModal} />
-			<JoinRoom showModal={showJoinRoom} closed={closeModal} />
-			<div className={styles.logoContainer}>
+			{/* {showJoinRoom && <JoinRoom showModal={showJoinRoom} closed={closeModal} />} */}
+			{/* <JoinRoom showModal={showJoinRoom} closed={closeModal} /> */}
+			<div className={styles.logoContainer} style={blurred}>
 				<Logo />
 			</div>
-			<div className={styles.buttonsContainer}>
+			<div className={styles.buttonsContainer} style={blurred}>
 				<Button clicked={createRoomClicked}>Create Room</Button>
 				<Button clicked={joinRoomClicked}>Join Room</Button>
 			</div>

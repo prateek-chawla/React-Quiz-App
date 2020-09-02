@@ -5,8 +5,8 @@ const Logo = () => {
 	const logoRef = useRef(null);
 
 	useEffect(() => {
+		const logo = logoRef.current;
 		const animateLogo = () => {
-			const logo = logoRef.current;
 			logo.style.opacity = 1;
 			const logoPaths = logo.children;
 			let delay = 0.2;
@@ -23,7 +23,7 @@ const Logo = () => {
 		};
 		logoRef.current.addEventListener("load", animateLogo);
 		return () => {
-			logoRef.current.removeEventListener("load", animateLogo);
+			logo.removeEventListener("load", animateLogo);
 		};
 	}, []);
 
