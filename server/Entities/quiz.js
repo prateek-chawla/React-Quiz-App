@@ -6,9 +6,9 @@ class Quiz {
 		this.room = roomID;
 
 		// Default Options
-		this.nQuestions = quizOptions.nQuestions || 5;
-		// this.difficulty = quizOptions.difficulty || "medium";
+		this.nQuestions = +quizOptions.nQuestions || 5;
 		this.category = quizOptions.category || 10; // Default - Books
+		// this.difficulty = quizOptions.difficulty || "medium";
 
 		this.questions = null;
 		this.currentQuesIdx = 0;
