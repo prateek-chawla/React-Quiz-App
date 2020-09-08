@@ -9,6 +9,7 @@ const initialState = {
 	isHost: true,
 	quizInProgress: false,
 	showResults: false,
+	duration: 1000,
 };
 
 const reducer = (state = initialState, action) => {
@@ -40,6 +41,7 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				roomID: action.roomID,
+				duration: action.duration,
 				quizInProgress: true,
 			};
 		case actionTypes.END_QUIZ:

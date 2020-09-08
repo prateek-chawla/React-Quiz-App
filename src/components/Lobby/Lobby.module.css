@@ -4,6 +4,7 @@
 	align-items: center;
 	height: 100%;
 	opacity: 0.9;
+	border: 1px solid ivory;
 }
 
 .logoContainer {

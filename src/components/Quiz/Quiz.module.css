@@ -1,0 +1,54 @@
+.timer {
+	height: 0.5rem;
+	width: calc(100% + 2px);
+	box-sizing: border-box;
+	background-color: #363638;
+}
+
+.timerInner {
+	height: 100%;
+	border-top-right-radius: 1rem;
+	border-top-left-radius: 1rem;
+	transition: all 1.5s ease;
+}
+.animateTimer {
+	animation: animate-timer ease;
+}
+.score {
+	width: 100%;
+	height: 10%;
+}
+
+.scoreContainer {
+	display: flex;
+	flex-direction: column;
+	width: calc(100% + 2px);
+	height: 1rem;
+	background-color: #363638;
+}
+
+.scoreContainer > div {
+	border-bottom-right-radius: 1rem;
+	border-bottom-left-radius: 1rem;
+	height: 0.5rem;
+	transition: width 0.2s ease;
+}
+
+.myScore {
+	background-color: blue;
+}
+.opponentScore {
+	background-color: yellow;
+}
+
+@keyframes animate-timer {
+	0% {
+		background-color: #fff;
+		width: 0%;
+	}
+
+	100% {
+		width: 100%;
+		background-color: firebrick;
+	}
+}

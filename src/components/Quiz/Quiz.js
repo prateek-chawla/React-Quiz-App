@@ -2,10 +2,13 @@ import React, { useEffect, useState, useRef } from "react";
 import { connect } from "react-redux";
 import { Redirect, Link } from "react-router-dom";
 import { socket } from "../../index";
+
+import Spinner from "../UI/Spinner/Spinner";
 import Question from "./Question/Question";
 
 import { formatScore } from "../../utils/score";
 import * as actions from "../../store/actions/actions";
+import styles from "./Quiz.module.css";
 
 const Quiz = props => {
 	const [loading, setLoading] = useState(true);
@@ -16,6 +19,11 @@ const Quiz = props => {
 	const playerID = socket.id;
 
 	const fetchMoreQuestionsTimeout = useRef(null);
+	const timerRef = useRef(null);
+	const myScoreRef = useRef(null);
+	const quesNumberRef = useRef(0);
+	const opponentScoreRef = useRef(null);
+
 	const {
 		quizInProgress,
 		score,
@@ -23,6 +31,7 @@ const Quiz = props => {
 		endQuiz,
 		updateScore,
 		isHost,
+		duration,
 		history,
 	} = props;
 
@@ -33,13 +42,13 @@ const Quiz = props => {
 
 		socket.on("next_question", response => {
 			if (response.status === "Success") {
-				setQuestion(response.question);
-				setChoices(response.choices);
 				setLoading(false);
+				setQuestion(response.question);
+				quesNumberRef.current++;
+				setChoices(response.choices);
 			} else if (response.status === "Questions_Finished") {
 				setLoading(false);
 				setQuestion(null);
-
 				endQuiz();
 				history.push("/result");
 			} else {
@@ -49,7 +58,7 @@ const Quiz = props => {
 
 		socket.on("opponent_left", finalScore => {
 			const score = formatScore(finalScore, playerID);
-			updateScore(score);
+			changeScore(score);
 			setOpponentLeft();
 			endQuiz();
 			history.push("/result");
@@ -57,7 +66,7 @@ const Quiz = props => {
 
 		socket.on("update_score", responseScore => {
 			const score = formatScore(responseScore, playerID);
-			updateScore(score);
+			changeScore(score);
 		});
 		return () => {
 			socket.off("opponent_left");
@@ -69,28 +78,72 @@ const Quiz = props => {
 	}, []);
 
 	useEffect(() => {
-		if (isHost) {
-			if (question)
-				fetchMoreQuestionsTimeout.current = setTimeout(getNextQuestion, 3000);
-			return () => clearTimeout(fetchMoreQuestionsTimeout.current);
+		if (isHost && question) {
+			fetchMoreQuestionsTimeout.current = setTimeout(getNextQuestion, duration);
 		}
+		if (timerRef.current) {
+			timerRef.current.classList.remove(styles.animateTimer);
+			void timerRef.current.offsetWidth;
+			timerRef.current.classList.add(styles.animateTimer);
+			timerRef.current.style.animationDuration = `${duration}ms`;
+		}
+
+		return () => clearTimeout(fetchMoreQuestionsTimeout.current);
 	}, [question]);
 
 	const getNextQuestion = () => {
 		socket.emit("get_next_question");
 	};
 
+	const changeScore = score => {
+		if (myScoreRef.current && opponentScoreRef.current) {
+			let myScoreWidth = "5%",
+				opponentScoreWidth = "5%";
+
+			if (score.myScore + score.opponentScore > 0) {
+				const maxScore = Math.max(score.myScore, score.opponentScore);
+				const scalingFactor = (quesNumberRef.current * 100) / maxScore;
+				const adjustedScalingFactor = scalingFactor > 2 ? Math.floor(scalingFactor) - 1 : 1;
+				myScoreWidth =
+					Math.max(
+						5,
+						parseInt((adjustedScalingFactor * score.myScore) / quesNumberRef.current)
+					) + "%";
+				opponentScoreWidth =
+					Math.max(
+						5,
+						parseInt(
+							(adjustedScalingFactor * score.opponentScore) / quesNumberRef.current
+						)
+					) + "%";
+			}
+			myScoreRef.current.style.width = myScoreWidth;
+			opponentScoreRef.current.style.width = opponentScoreWidth;
+		}
+		updateScore(score);
+	};
+
 	return (
 		<>
 			{homeRedirect && <Redirect to="/" />}
-			<Link to="/">Lobby</Link>
-			<div>
-				<div>Quiz</div>
-				{loading ? "Loading...." : null}
-				<Question question={question} choices={choices} />
-			</div>
-			<div>My Score {score.myScore}</div>
-			<div>Opponent Score {score.opponentScore}</div>
+			{loading ? (
+				<Spinner />
+			) : (
+				<>
+					<div className={styles.timer}>
+						<div ref={timerRef} className={styles.timerInner} />
+					</div>
+					<Question
+						question={question}
+						choices={choices}
+						questionNumber={quesNumberRef.current}
+					/>
+					<div className={styles.scoreContainer}>
+						<div ref={myScoreRef} className={styles.myScore} />
+						<div ref={opponentScoreRef} className={styles.opponentScore} />
+					</div>
+				</>
+			)}
 		</>
 	);
 };
@@ -100,6 +153,7 @@ const mapStateToProps = state => {
 		quizInProgress: state.quizInProgress,
 		score: state.score,
 		isHost: state.isHost,
+		duration: state.duration,
 	};
 };
 

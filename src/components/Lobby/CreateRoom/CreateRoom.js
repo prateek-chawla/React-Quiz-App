@@ -30,8 +30,8 @@ const CreateRoom = props => {
 
 		socket.on("opponent_left", () => setOpponentJoined(false));
 
-		socket.on("start_quiz_ack", room => {
-			startQuiz(room);
+		socket.on("start_quiz_ack", ({ roomID, duration }) => {
+			startQuiz(roomID, duration);
 			history.push(`/quiz`);
 		});
 
@@ -135,7 +135,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		startQuiz: roomID => dispatch(actions.startQuiz(roomID)),
+		startQuiz: (roomID, duration) => dispatch(actions.startQuiz(roomID, duration)),
 		setOpponentJoined: opponentJoined => dispatch(actions.setOpponentJoined(opponentJoined)),
 	};
 };

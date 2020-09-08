@@ -2,21 +2,16 @@ import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 
-import Modal from "../../UI/Modal/Modal";
-import Spinner from "../../UI/Spinner/Spinner";
 import Loader from "../../UI/Loader/Loader";
-import Button from "../../UI/Button/Button";
 import FormModal from "../../UI/FormModal/FormModal";
 import ModalButton from "../../UI/FormModal/Button/Button";
 
 import { socket } from "../../../index";
-import { joinClasses } from "../../../utils/general";
 import * as actions from "../../../store/actions/actions";
 import styles from "../../UI/FormModal/FormModal.module.css";
 
 const JoinRoom = props => {
 	const [roomID, setRoomID] = useState("");
-	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 	const [disableBtn, setDisableBtn] = useState(true);
 
@@ -25,8 +20,8 @@ const JoinRoom = props => {
 	const { startQuiz, history, showModal, closed } = props;
 
 	useEffect(() => {
-		socket.on("start_quiz_ack", room => {
-			startQuiz(room);
+		socket.on("start_quiz_ack", ({ roomID, duration }) => {
+			startQuiz(roomID, duration);
 			history.push(`/quiz`);
 		});
 
@@ -45,16 +40,13 @@ const JoinRoom = props => {
 
 	const submitJoinRoomHandler = event => {
 		event.preventDefault();
-		// setLoading(true);
 		socket.emit("join_room", roomID, response => {
 			if (response.status === "Success") {
 				props.setIsHost();
-				setLoading(false);
 				setError(null);
 				unstackCard();
 			} else {
 				setError(response.message);
-				setLoading(false);
 			}
 		});
 	};
@@ -69,15 +61,6 @@ const JoinRoom = props => {
 		topCard.current = nextCard;
 	};
 
-	// let joinRoomForm = (
-	// 	<form onSubmit={submitJoinRoomHandler}>
-	// 		<input type="text" onChange={changeRoomID} value={roomID} required />
-	// 		<Button type="submit" clicked={submitJoinRoomHandler}>
-	// 			Join Room
-	// 		</Button>
-	// 	</form>
-	// );
-
 	return (
 		<FormModal
 			title="Join Room"
@@ -88,7 +71,6 @@ const JoinRoom = props => {
 		>
 			<div ref={topCard} className={styles.top}>
 				<div className={styles.message}>Enter Room ID</div>
-				{/* <div className={joinClasses(styles.inputGroup,styles.joinCard)}> */}
 				<div className={styles.joinCard}>
 					<input type="text" onChange={changeRoomID} value={roomID} />
 					<ModalButton disabled={disableBtn} clicked={submitJoinRoomHandler} icon="check">
@@ -106,7 +88,7 @@ const JoinRoom = props => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		startQuiz: roomID => dispatch(actions.startQuiz(roomID)),
+		startQuiz: (roomID, duration) => dispatch(actions.startQuiz(roomID, duration)),
 		setIsHost: () => dispatch(actions.setIsHost(false)),
 	};
 };

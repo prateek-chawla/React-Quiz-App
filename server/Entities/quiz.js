@@ -14,6 +14,7 @@ class Quiz {
 		this.currentQuesIdx = 0;
 		this.currentAnswer = null;
 		this.players = players;
+		this.duration = 3000;
 	}
 
 	fetchQuestions() {
@@ -22,14 +23,14 @@ class Quiz {
 		return axios.get(url);
 	}
 
-	async getNextQuestion(player) {
+	async getNextQuestion() {
 		// If questions havent been fetched yet
 		if (!this.currentAnswer) {
 			const response = await this.fetchQuestions();
 			const questions = response.data.results;
 			this.questions = questions;
 		}
-		return this.getQuestion(player);
+		return this.getQuestion();
 	}
 
 	getScore() {
@@ -41,7 +42,7 @@ class Quiz {
 		return score;
 	}
 
-	getQuestion(player) {
+	getQuestion() {
 		if (this.currentQuesIdx === this.nQuestions) {
 			// Quiz Finished - Return Final Score
 			const score = this.getScore();
@@ -74,11 +75,10 @@ class Quiz {
 		if (this.currentAnswer === answer) {
 			// Update Score
 			const currentTime = new Date().getTime();
-			const duration = 3000; //milliseconds
 
 			const baseScore = 40; // atleast 40 points for a correct answer
 			const speedScore = parseInt(
-				(1 - (currentTime - this.players[player].time) / duration) * 60
+				(1 - (currentTime - this.players[player].time) / this.duration) * 60
 			); // 60 variable points based on how fast the question was answered
 
 			const scoreIncrement = baseScore + speedScore;

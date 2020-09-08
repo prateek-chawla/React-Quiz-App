@@ -23,8 +23,8 @@ export const updateScore = score => {
 	return { type: actionTypes.UPDATE_SCORE, score };
 };
 
-export const startQuiz = roomID => {
-	return { type: actionTypes.START_QUIZ, roomID };
+export const startQuiz = (roomID, duration) => {
+	return { type: actionTypes.START_QUIZ, roomID, duration };
 };
 
 export const endQuiz = () => {

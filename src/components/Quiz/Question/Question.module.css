@@ -1,0 +1,102 @@
+@import url("https://fonts.googleapis.com/css2?family=Didact+Gothic&display=swap");
+
+.quesContainer {
+	display: flex;
+	height: calc(100% - 1.5rem);
+	width: 100%;
+	font-family: "Didact Gothic", sans-serif;
+	border-top: 1px solid;
+	border: 1px solid;
+    flex-wrap: nowrap;
+    color: ivory;
+
+}
+.left {
+	width: 45%;
+	margin-right: 0.75rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+.quesNumber {
+	padding: 1rem 2rem;
+	box-sizing: border-box;
+	display: inline-block;
+	height: 35%;
+	font-size: 9.3rem;
+	width: 100%;
+}
+.question {
+	height: 65%;
+	width: 100%;
+	letter-spacing: 0.5px;
+	font-size: 1.8rem;
+	overflow: hidden;
+	padding: 0 2rem;
+	margin: 2rem 0 3rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	box-sizing: border-box;
+}
+.question div {
+	width: 100%;
+	display: flex;
+	box-sizing: border-box;
+	overflow-y: auto;
+}
+
+.choices {
+	display: flex;
+	flex-direction: column;
+	width: 55%;
+	height: 100%;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.choice {
+	border-bottom: 1px solid;
+	width: 100%;
+	height: 25%;
+	padding: 2rem;
+	font-size: 1.5rem;
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-left: 1px solid;
+	text-align: center;
+}
+
+.choice:hover {
+	cursor: pointer;
+	background-color: rgb(78, 78, 189);
+}
+
+.choice:active{
+    background-color: yellow;
+}
+
+.choice:last-child {
+	border-bottom: none;
+}
+
+/* ScrollBar */
+
+::-webkit-scrollbar {
+	width: 0.4rem;
+}
+
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background: rgba(255, 255, 240, 0.733);
+	border-radius: 1rem;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: grey;
+}
