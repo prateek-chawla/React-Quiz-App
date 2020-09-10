@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 
+import { socket } from "../../index";
+
 import CreateRoom from "./CreateRoom/CreateRoom";
 import JoinRoom from "./JoinRoom/JoinRoom";
 import Logo from "../UI/Logo/Logo";
@@ -14,11 +16,18 @@ const Lobby = props => {
 	const [showJoinRoom, setShowJoinRoom] = useState(false);
 	const [showCreateRoom, setShowCreateRoom] = useState(false);
 
-	const { resetQuiz } = props;
+	const { resetQuiz, setOpponentLeft } = props;
 
 	useEffect(() => {
 		resetQuiz();
-	}, [resetQuiz]);
+		socket.on("opponent_left", () => {
+			setOpponentLeft();
+			closeModal();
+		});
+		return () => {
+			socket.off("opponent_left");
+		};
+	}, [resetQuiz,setOpponentLeft]);
 
 	const createRoomClicked = () => {
 		setShowCreateRoom(true);
@@ -53,6 +62,7 @@ const Lobby = props => {
 const mapDispatchToProps = dispatch => {
 	return {
 		resetQuiz: () => dispatch(actions.resetQuiz()),
+		setOpponentLeft: () => dispatch(actions.setOpponentLeft()),
 	};
 };
 

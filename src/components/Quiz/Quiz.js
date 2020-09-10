@@ -7,19 +7,16 @@ import { socket } from "../../index";
 import Spinner from "../UI/Spinner/Spinner";
 import Question from "./Question/Question";
 
-import { formatScore, answerStatus } from "../../utils/score";
+import { formatScore, answerStatus, changeScoreWidth } from "../../utils/score";
 import * as actions from "../../store/actions/actions";
 import styles from "./Quiz.module.css";
 
 const Quiz = props => {
-	const { enter, enterActive, exit, exitActive } = styles;
 	const [loading, setLoading] = useState(true);
 	const [question, setQuestion] = useState(null);
 	const [choices, setChoices] = useState(null);
 	const [homeRedirect, setHomeRedirect] = useState(false);
 	const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
-
-	const playerID = socket.id;
 
 	const fetchMoreQuestionsTimeout = useRef(null);
 	const timerRef = useRef(null);
@@ -27,6 +24,8 @@ const Quiz = props => {
 	const myScoreRef = useRef(null);
 	const opponentScoreRef = useRef(null);
 
+	const playerID = socket.id;
+	const { appear, appearActive, enter, enterActive, exit, exitActive } = styles;
 	const {
 		quizInProgress,
 		setOpponentLeft,
@@ -44,13 +43,12 @@ const Quiz = props => {
 
 		socket.on("next_question", response => {
 			if (response.status === "Success") {
-				setLoading(false);
-				setQuestion(response.question);
 				quesNumberRef.current++;
+				setQuestion(response.question);
 				setIsAnswerCorrect(answerStatus.UNANSWERED);
 				setChoices(response.choices);
-			} else if (response.status === "Questions_Finished") {
 				setLoading(false);
+			} else if (response.status === "Questions_Finished") {
 				setQuestion(null);
 				endQuiz();
 				history.push("/result");
@@ -69,7 +67,7 @@ const Quiz = props => {
 			const formattedScore = formatScore(score, playerID);
 			changeScore(formattedScore, player, isCorrect);
 		});
-		
+
 		return () => {
 			socket.off("opponent_left");
 			socket.off("next_question");
@@ -80,19 +78,22 @@ const Quiz = props => {
 	}, []);
 
 	useEffect(() => {
-		if (isHost && question) {
+		if (isHost && question)
 			fetchMoreQuestionsTimeout.current = setTimeout(getNextQuestion, duration);
-		}
+
+		return () => clearTimeout(fetchMoreQuestionsTimeout.current);
+	}, [question, isHost, duration]);
+
+	const animateTimer = () => {
 		if (timerRef.current) {
 			timerRef.current.classList.remove(styles.animateTimer);
 			//Force Reflow
 			void timerRef.current.offsetWidth;
 			timerRef.current.classList.add(styles.animateTimer);
-			timerRef.current.style.animationDuration = `${duration}ms`;
+			const animationDelay = 500;
+			timerRef.current.style.animationDuration = duration - animationDelay + "ms";
 		}
-
-		return () => clearTimeout(fetchMoreQuestionsTimeout.current);
-	}, [question]);
+	};
 
 	const getNextQuestion = () => {
 		socket.emit("get_next_question");
@@ -103,21 +104,12 @@ const Quiz = props => {
 			if (isCorrect) setIsAnswerCorrect(answerStatus.CORRECT);
 			else setIsAnswerCorrect(answerStatus.INCORRECT);
 		}
-		if (myScoreRef.current && opponentScoreRef.current) {
-			let myScoreWidth = "0%",
-				opponentScoreWidth = "0%";
 
-			if (score.myScore + score.opponentScore > 0) {
-				const maxScore = Math.max(score.myScore, score.opponentScore);
-				const scalingFactor = (quesNumberRef.current * 100) / maxScore;
-				const adjustedScalingFactor = scalingFactor > 1 ? Math.floor(scalingFactor) : 1;
-				myScoreWidth =
-					parseInt((adjustedScalingFactor * score.myScore) / quesNumberRef.current) + "%";
-				opponentScoreWidth =
-					parseInt(
-						(adjustedScalingFactor * score.opponentScore) / quesNumberRef.current
-					) + "%";
-			}
+		if (myScoreRef.current && opponentScoreRef.current) {
+			const { myScoreWidth, opponentScoreWidth } = changeScoreWidth(
+				score,
+				quesNumberRef.current
+			);
 
 			myScoreRef.current.style.width = myScoreWidth;
 			opponentScoreRef.current.style.width = opponentScoreWidth;
@@ -135,20 +127,16 @@ const Quiz = props => {
 					<div className={styles.timer}>
 						<div ref={timerRef} className={styles.timerInner} />
 					</div>
+
+					{/* prettier-ignore */}
 					<TransitionGroup>
-						<CSSTransition
-							timeout={{
-								enter: 500,
-								exit: 250,
-							}}
-							key={quesNumberRef.current}
-							classNames={{ enter, enterActive, exit, exitActive }}
+						<CSSTransition timeout={{enter: 500,exit: 250,}} key={quesNumberRef.current} appear
+							classNames={{appear,appearActive,enter,enterActive,exit,exitActive,}}
+							onEntered={animateTimer}
 						>
 							<Question
-								question={question}
-								choices={choices}
-								questionNumber={quesNumberRef.current}
-								isAnswerCorrect={isAnswerCorrect}
+									question={question} choices={choices} isAnswerCorrect={isAnswerCorrect}
+									questionNumber={quesNumberRef.current}
 							/>
 						</CSSTransition>
 					</TransitionGroup>

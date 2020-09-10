@@ -24,11 +24,9 @@ const CreateRoom = props => {
 
 	useEffect(() => {
 		socket.on("player_joined", () => {
-			setOpponentJoined(true);
+			setOpponentJoined();
 			unstackCard();
 		});
-
-		socket.on("opponent_left", () => setOpponentJoined(false));
 
 		socket.on("start_quiz_ack", ({ roomID, duration }) => {
 			startQuiz(roomID, duration);
@@ -38,7 +36,6 @@ const CreateRoom = props => {
 		return () => {
 			socket.off("start_quiz_ack");
 			socket.off("player_joined");
-			socket.off("opponent_left");
 		};
 		//eslint-disable-next-line
 	}, []);
@@ -136,7 +133,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
 	return {
 		startQuiz: (roomID, duration) => dispatch(actions.startQuiz(roomID, duration)),
-		setOpponentJoined: opponentJoined => dispatch(actions.setOpponentJoined(opponentJoined)),
+		setOpponentJoined: () => dispatch(actions.setOpponentJoined()),
 	};
 };
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CreateRoom));

@@ -17,7 +17,7 @@ const reducer = (state = initialState, action) => {
 		case actionTypes.SET_OPPONENT_JOINED:
 			return {
 				...state,
-				opponentJoined: action.opponentJoined,
+				opponentJoined: true,
 				isHost: true,
 			};
 		case actionTypes.SET_ROOM_ID:
