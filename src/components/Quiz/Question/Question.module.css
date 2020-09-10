@@ -7,9 +7,11 @@
 	font-family: "Didact Gothic", sans-serif;
 	border-top: 1px solid;
 	border: 1px solid;
-    flex-wrap: nowrap;
-    color: ivory;
-
+	flex-wrap: nowrap;
+	color: ivory;
+	top: 0.5rem;
+	position: absolute;
+	background-color: rgb(30, 30, 30); /*#1e1e1e*/
 }
 .left {
 	width: 45%;
@@ -67,19 +69,30 @@
 	justify-content: center;
 	border-left: 1px solid;
 	text-align: center;
+	cursor: auto;
 }
 
 .choice:hover {
 	cursor: pointer;
 	background-color: rgb(78, 78, 189);
 }
-
-.choice:active{
-    background-color: yellow;
+.disableChoices,
+.disableChoices:hover {
+	opacity: 0.7;
+	cursor: not-allowed;
+	background-color: inherit;
 }
 
 .choice:last-child {
 	border-bottom: none;
+}
+
+.flashGreen {
+	animation: flash-green 0.4s linear;
+}
+
+.flashRed {
+	animation: flash-red 0.4s linear;
 }
 
 /* ScrollBar */
@@ -99,4 +112,49 @@
 
 ::-webkit-scrollbar-thumb:hover {
 	background: grey;
+}
+
+/* RTG */
+.enter {
+	opacity: 0;
+	transform: translate(120vw, 0);
+}
+.enterActive {
+	transform: translate(0, 0);
+	opacity: 1;
+	transition: all 1000ms ease-in 1000ms;
+}
+.exit {
+	opacity: 1;
+	transform: translate(0, 0);
+}
+.exitActive {
+	opacity: 0;
+	transform: translate(120vw, 0);
+	transition: all 1000ms ease-in;
+}
+
+/* Animations */
+@keyframes flash-green {
+	0% {
+		background-color: transparent;
+	}
+	50% {
+		background-color: yellowgreen;
+	}
+	100% {
+		background-color: transparent;
+	}
+}
+
+@keyframes flash-red {
+	0% {
+		background-color: transparent;
+	}
+	50% {
+		background-color: firebrick;
+	}
+	100% {
+		background-color: transparent;
+	}
 }

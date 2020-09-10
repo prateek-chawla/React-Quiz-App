@@ -8,8 +8,8 @@ export const formatScore = (inputScore, playerID) => {
 	return score;
 };
 
-export const getResult = (score) => {
-	const { myScore, opponentScore } = score
+export const getResult = score => {
+	const { myScore, opponentScore } = score;
 	let resultMsg;
 	if (myScore > opponentScore) {
 		resultMsg = "You win";
@@ -20,4 +20,10 @@ export const getResult = (score) => {
 	}
 
 	return { myScore, opponentScore, resultMsg };
+};
+
+export const answerStatus = {
+	UNANSWERED: 0,
+	CORRECT: 1,
+	INCORRECT: 2,
 };

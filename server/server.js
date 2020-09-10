@@ -40,8 +40,13 @@ io.on("connection", socket => {
 	});
 
 	socket.on("submit_answer", answer => {
+		const player = socket.id;
 		const quiz = quizManager.getQuiz(socket.quizRoom);
-		if (quiz) quiz.checkAnswer(socket.id, answer);
+		if (quiz) {
+			const isCorrect = quiz.checkAnswer(player, answer);
+			const score = quiz.getScore();
+			io.to(quiz.room).emit("update_score", { score, player, isCorrect });
+		}
 	});
 
 	socket.on("get_next_question", async () => {
@@ -49,7 +54,7 @@ io.on("connection", socket => {
 		if (quiz) {
 			const question = await quiz.getNextQuestion();
 			const score = quiz.getScore();
-			io.to(quiz.room).emit("update_score", score);
+			io.to(quiz.room).emit("update_score", { score, player: null, isCorrect: null });
 			io.to(quiz.room).emit("next_question", question);
 		}
 	});
@@ -75,13 +80,8 @@ io.on("connection", socket => {
 	socket.on("disconnecting", () => {
 		const room = socket.quizRoom;
 		const quiz = quizManager.getQuiz(socket.quizRoom);
-		if (quiz) {
-			const score = quiz.getScore();
-			io.to(room).emit("opponent_left", score);
-			quizManager.cleanup(quiz);
-		} else {
-			io.to(room).emit("opponent_left");
-		}
+		io.to(room).emit("opponent_left");
+		if (quiz) quizManager.cleanup(quiz);
 		socket.quizRoom = null;
 	});
 });

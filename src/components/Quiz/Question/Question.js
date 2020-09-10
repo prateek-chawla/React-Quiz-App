@@ -1,21 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { socket } from "../../../index";
-
+import { joinClasses } from "../../../utils/general";
+import { answerStatus } from "../../../utils/score";
 import styles from "./Question.module.css";
 
 const Question = props => {
 	const [disableChoices, setDisableChoices] = useState(false);
-
-	const { question, choices, questionNumber } = props;
+	const submittedAnsRef = useRef(null);
+	const { question, choices, questionNumber, isAnswerCorrect } = props;
 
 	useEffect(() => {
-		setDisableChoices(false);
-	}, [question, choices]);
+		if (submittedAnsRef.current) {
+			if (isAnswerCorrect === answerStatus.CORRECT)
+				submittedAnsRef.current.classList.add(styles.flashGreen);
+			else if (isAnswerCorrect === answerStatus.INCORRECT)
+				submittedAnsRef.current.classList.add(styles.flashRed);
+		}
+	}, [isAnswerCorrect]);
 
 	const submitChoice = event => {
+		if (disableChoices) return;
 		const answer = event.target.textContent;
 		socket.emit("submit_answer", answer);
-		console.log("Submitting answer ",answer)
+		submittedAnsRef.current = event.target;
 		setDisableChoices(true);
 	};
 
@@ -34,9 +41,11 @@ const Question = props => {
 					choices.map(choice => (
 						<div
 							key={choice}
-							className={styles.choice}
+							className={joinClasses(
+								styles.choice,
+								disableChoices ? styles.disableChoices : ""
+							)}
 							onClick={submitChoice}
-							disabled={disableChoices}
 						>
 							{choice}
 						</div>

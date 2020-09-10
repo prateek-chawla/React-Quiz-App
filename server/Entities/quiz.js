@@ -14,7 +14,7 @@ class Quiz {
 		this.currentQuesIdx = 0;
 		this.currentAnswer = null;
 		this.players = players;
-		this.duration = 3000;
+		this.duration = 10000;
 	}
 
 	fetchQuestions() {
@@ -72,8 +72,10 @@ class Quiz {
 	}
 
 	checkAnswer(player, answer) {
+		let isCorrect = false;
 		if (this.currentAnswer === answer) {
 			// Update Score
+			isCorrect=true
 			const currentTime = new Date().getTime();
 
 			const baseScore = 40; // atleast 40 points for a correct answer
@@ -84,6 +86,7 @@ class Quiz {
 			const scoreIncrement = baseScore + speedScore;
 			this.players[player].score += scoreIncrement;
 		}
+		return isCorrect
 	}
 }
 
