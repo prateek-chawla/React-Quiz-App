@@ -11,7 +11,6 @@ const App = props => {
 		<Layout>
 			<Switch>
 				<Route path="/quiz" component={Quiz} />
-				<Route path="/result" component={Result} />
 				<Route path="/" exact component={Lobby} />
 				<Redirect to="/" />
 			</Switch>

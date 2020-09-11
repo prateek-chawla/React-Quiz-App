@@ -13,13 +13,15 @@ import * as actions from "../../store/actions/actions";
 import styles from "./Lobby.module.css";
 
 const Lobby = props => {
+	console.log(props);
 	const [showJoinRoom, setShowJoinRoom] = useState(false);
 	const [showCreateRoom, setShowCreateRoom] = useState(false);
 
 	const { resetQuiz, setOpponentLeft } = props;
+	const redirectedFromQuiz = props.location.state && props.location.state.from === "/quiz";
 
 	useEffect(() => {
-		resetQuiz();
+		if (redirectedFromQuiz) resetQuiz();
 		socket.on("opponent_left", () => {
 			setOpponentLeft();
 			closeModal();
@@ -27,7 +29,7 @@ const Lobby = props => {
 		return () => {
 			socket.off("opponent_left");
 		};
-	}, [resetQuiz,setOpponentLeft]);
+	}, [resetQuiz, setOpponentLeft]);
 
 	const createRoomClicked = () => {
 		setShowCreateRoom(true);
@@ -49,7 +51,7 @@ const Lobby = props => {
 			<CreateRoom showModal={showCreateRoom} closed={closeModal} />
 			<JoinRoom showModal={showJoinRoom} closed={closeModal} />
 			<div className={styles.logoContainer} style={blurred}>
-				<Logo />
+				<Logo triggerLogoAnimation={!redirectedFromQuiz} />
 			</div>
 			<div className={styles.buttonsContainer} style={blurred}>
 				<Button clicked={createRoomClicked}>Create Room</Button>

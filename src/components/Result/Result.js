@@ -1,28 +1,44 @@
 import React from "react";
-import { Redirect, Link } from "react-router-dom";
 import { connect } from "react-redux";
 
+import Modal from "../UI/Modal/Modal";
 import { getResult } from "../../utils/score";
+import goldTrophy from "../../assets/images/trophyGold.png";
+import silverTrophy from "../../assets/images/trophySilver.png";
+
+import styles from "./Result.module.css";
 
 const Result = props => {
-	const { score, opponentLeft, showResults } = props;
+	const { score, opponentLeft, showResults, closed } = props;
 	let { myScore, opponentScore, resultMsg } = getResult(score);
 
-	if (opponentLeft) {
-		resultMsg = "OpponentLeft";
-	}
-	const homeRedirect = showResults ? null : <Redirect to="/" />;
+	const resultIcon = myScore < opponentScore ? silverTrophy : goldTrophy;
+
+	if (opponentLeft) resultMsg = "Opponent Left";
 
 	return (
-		<>
-			{homeRedirect}
-			<Link to="/">Play Again</Link>
-			<div>
-				<div> Your Score {myScore}</div>
-				<div> Opponent Score {opponentScore}</div>
-				<div>{resultMsg}</div>
+		<Modal showModal={showResults} closed={closed}>
+			<div className={styles.semicircle} />
+			<div className={styles.trophyContainer}>
+				<img src={resultIcon} alt="Trophy" />
 			</div>
-		</>
+			<div className={styles.scoreContainer}>
+				<div className={styles.scoreMsg}>{resultMsg}</div>
+				<div className={styles.title}>Score</div>
+				<div className={styles.score}>
+					<div className={styles.myScore}>
+						<span>{myScore}</span>
+					</div>
+					<div className={styles.separator} />
+					<div className={styles.opponentScore}>
+						<span>{opponentScore}</span>
+					</div>
+				</div>
+			</div>
+			<div className={styles.playAgain} onClick={closed}>
+				<span>Play Again</span>
+			</div>
+		</Modal>
 	);
 };
 
@@ -31,7 +47,6 @@ const mapStateToProps = state => {
 		score: state.score,
 		playerID: state.playerID,
 		opponentLeft: state.opponentLeft,
-		showResults: state.showResults,
 	};
 };
 export default connect(mapStateToProps)(Result);

@@ -8,7 +8,6 @@ const initialState = {
 	score: { myScore: 0, opponentScore: 0 },
 	isHost: true,
 	quizInProgress: false,
-	showResults: false,
 	duration: 1000,
 };
 
@@ -34,7 +33,6 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				opponentLeft: true,
-				showResults: true,
 				quizInProgress: false,
 			};
 		case actionTypes.START_QUIZ:
@@ -47,7 +45,6 @@ const reducer = (state = initialState, action) => {
 		case actionTypes.END_QUIZ:
 			return {
 				...state,
-				showResults: true,
 				quizInProgress: false,
 			};
 		case actionTypes.UPDATE_SCORE:

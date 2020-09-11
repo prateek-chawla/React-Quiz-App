@@ -1,5 +1,3 @@
-@import url("https://db.onlinewebfonts.com/c/0abeb2471faeb5269db428b9eac2075e?family=GT+Walsheim+Pro+Regular");
-
 .modal {
 	display: flex;
 	flex-direction: column;
@@ -7,7 +5,6 @@
 	box-sizing: border-box;
 	position: fixed;
 	z-index: 500;
-	will-change: top;
 	left: calc(50% - 200px);
 }
 
@@ -116,7 +113,6 @@ input[type="radio"] {
 
 .joinCard {
 	height: 100%;
-	/* box-sizing: border-box; */
 	display: flex;
 	border-bottom-left-radius: 1rem;
 	border-bottom-right-radius: 1rem;

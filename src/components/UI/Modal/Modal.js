@@ -1,7 +1,6 @@
 import React from "react";
 
 import Backdrop from "../Backdrop/Backdrop";
-import CloseButton from '../CloseButton/CloseButton'
 
 import styles from "./Modal.module.css";
 
@@ -17,7 +16,6 @@ const Modal = props => {
 		<>
 			<Backdrop showBackdrop={props.showModal} closed={props.closed} />
 			<div className={styles.Modal} style={modalStyle}>
-				<CloseButton clicked={props.closed}/>
 				{props.children}
 			</div>
 		</>

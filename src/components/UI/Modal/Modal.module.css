@@ -1,17 +1,18 @@
 .Modal {
 	position: fixed;
 	z-index: 500;
+	height: 350px;
+	width: 400px;
 	background-color: #363638;
-	width: 40%;
-	height: 65%;
-	border: 1px solid rgba(255, 255, 240, 0.3);
-	box-shadow: 1px 1px 1px black;
-	will-change: transform;
-	padding: 16px;
-    left: 50%;
-    transform:translateX(-50%);
-	top: 20%;
-	box-sizing: border-box;
-	border-radius: 0.2rem;
+	border: 6px solid rgb(0, 0, 0, 0.8);
+	border-radius: 8px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	color: rgba(255, 255, 240, 0.75);
+	font-family: "Didact Gothic", sans-serif;
+	left: 50%;
+	transform: translateX(-50%);
+	top: 25%;
 	transition: all 0.4s ease-in-out;
 }

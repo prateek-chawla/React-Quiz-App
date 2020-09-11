@@ -6,6 +6,7 @@ import { socket } from "../../index";
 
 import Spinner from "../UI/Spinner/Spinner";
 import Question from "./Question/Question";
+import Result from "../Result/Result";
 
 import { formatScore, answerStatus, changeScoreWidth } from "../../utils/score";
 import * as actions from "../../store/actions/actions";
@@ -17,6 +18,7 @@ const Quiz = props => {
 	const [choices, setChoices] = useState(null);
 	const [homeRedirect, setHomeRedirect] = useState(false);
 	const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
+	const [showResults, setShowResults] = useState(false);
 
 	const fetchMoreQuestionsTimeout = useRef(null);
 	const timerRef = useRef(null);
@@ -51,7 +53,7 @@ const Quiz = props => {
 			} else if (response.status === "Questions_Finished") {
 				setQuestion(null);
 				endQuiz();
-				history.push("/result");
+				setShowResults(true);
 			} else {
 				console.log("ERROR");
 			}
@@ -60,7 +62,7 @@ const Quiz = props => {
 		socket.on("opponent_left", () => {
 			setOpponentLeft();
 			endQuiz();
-			history.push("/result");
+			setShowResults(true);
 		});
 
 		socket.on("update_score", ({ score, player, isCorrect }) => {
@@ -116,14 +118,20 @@ const Quiz = props => {
 		}
 		updateScore(score);
 	};
+	const blurred = showResults ? { filter: "blur(15px)" } : null;
 
 	return (
 		<>
-			{homeRedirect && <Redirect to="/" />}
+			{homeRedirect && (
+				<Redirect to={{ pathname: "/", state: { from: props.location.pathname } }} />
+			)}
+
+			<Result showResults={showResults} closed={() => setHomeRedirect(true)} />
+
 			{loading ? (
 				<Spinner />
 			) : (
-				<div className={styles.quiz}>
+				<div className={styles.quiz} style={blurred}>
 					<div className={styles.timer}>
 						<div ref={timerRef} className={styles.timerInner} />
 					</div>
