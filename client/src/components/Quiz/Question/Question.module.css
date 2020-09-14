@@ -88,11 +88,11 @@
 }
 
 .flashGreen {
-	animation: flash-green 0.4s linear;
+	animation: flash-green 0.4s linear 2;
 }
 
 .flashRed {
-	animation: flash-red 0.4s linear;
+	animation: flash-red 0.4s linear 2;
 }
 
 /* ScrollBar */
