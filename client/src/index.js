@@ -8,12 +8,14 @@ import { devToolsEnhancer } from "redux-devtools-extension/developmentOnly";
 import "./index.css";
 import App from "./App";
 
-import socketIOClient from "socket.io-client";
+import io from "socket.io-client";
 
 import reducer from "./store/reducers/reducer";
 
-const ENDPOINT = "http://127.0.0.1:4001";
-export const socket = socketIOClient(ENDPOINT);
+const socketURL =
+	process.env.NODE_ENV === "production" ? window.location.hostname : "http://localhost:4001";
+
+export const socket = io.connect(socketURL);
 
 const store = createStore(reducer, devToolsEnhancer());
 

@@ -86,4 +86,10 @@ io.on("connection", socket => {
 	});
 });
 
-server.listen(PORT, () => console.log("**** Socket IO ****"));
+app.use(express.static(path.join(__dirname, "client/build")));
+
+app.get("*", (req, res) => {
+	res.sendFile(path.join(__dirname + "/client/build/index.html"));
+});
+
+server.listen(PORT, () => console.log(`Socket IO PORT# ${PORT}`));

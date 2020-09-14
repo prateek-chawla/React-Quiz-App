@@ -13,7 +13,6 @@ import * as actions from "../../store/actions/actions";
 import styles from "./Lobby.module.css";
 
 const Lobby = props => {
-	console.log(props);
 	const [showJoinRoom, setShowJoinRoom] = useState(false);
 	const [showCreateRoom, setShowCreateRoom] = useState(false);
 
