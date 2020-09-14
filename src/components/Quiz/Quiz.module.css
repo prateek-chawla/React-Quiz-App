@@ -51,10 +51,19 @@
 }
 
 .myScore {
-	background-color: rgb(120, 120, 120);
+	background-color: #ffa400;
+	/* background-color: #90C2E7; */
+	/* background-color: #FFC971 ; */
+	/* background-color: #BFDBF7; */
+	background-color: #BFAFA6 ;
+	/* background-color: #FFB86F; */
+	/* background-color: #B796AC; */
 }
 .opponentScore {
-	background-color: rgb(90, 90, 90);
+	background-color: rgb(60,60,60);
+	/* background-color: #BFDBF7; */
+	/* background-color: #BFAFA6 ; */
+	background-color: #6A584D;
 }
 
 /* RTG */

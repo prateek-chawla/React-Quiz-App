@@ -5,7 +5,6 @@ const Logo = ({triggerLogoAnimation}) => {
 	const logoRef = useRef(null);
 
 	useEffect(() => {
-		console.log(triggerLogoAnimation)
 		const logo = logoRef.current;
 		const animateLogo = () => {
 			logo.style.opacity = 1;

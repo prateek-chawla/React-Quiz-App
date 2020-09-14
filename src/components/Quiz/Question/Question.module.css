@@ -74,7 +74,7 @@
 
 .choice:hover {
 	cursor: pointer;
-	background-color: rgb(78, 78, 189);
+	background-color: #464666;
 }
 .disableChoices,
 .disableChoices:hover {
@@ -140,7 +140,7 @@
 		background-color: transparent;
 	}
 	50% {
-		background-color: yellowgreen;
+		background-color: limegreen;
 	}
 	100% {
 		background-color: transparent;

@@ -9,7 +9,7 @@
 	height: 20px;
 	width: 20px;
 	border-radius: 50%;
-	background-color: gray;
+	background-color: #474656;
 	display: inline-block;
 	animation: moveUp 1.4s ease-in-out infinite;
 	margin-right: 0.1rem;

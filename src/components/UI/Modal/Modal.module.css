@@ -10,7 +10,6 @@
 	flex-direction: column;
 	justify-content: flex-end;
 	color: rgba(255, 255, 240, 0.75);
-	font-family: "Didact Gothic", sans-serif;
 	left: 50%;
 	transform: translateX(-50%);
 	top: 25%;

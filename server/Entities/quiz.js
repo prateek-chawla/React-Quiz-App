@@ -14,7 +14,7 @@ class Quiz {
 		this.currentQuesIdx = 0;
 		this.currentAnswer = null;
 		this.players = players;
-		this.duration = 10000;
+		this.duration = 8500;
 	}
 
 	fetchQuestions() {

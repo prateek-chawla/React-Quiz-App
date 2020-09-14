@@ -73,7 +73,7 @@ const JoinRoom = props => {
 				<div className={styles.message}>Enter Room ID</div>
 				<div className={styles.joinCard}>
 					<input type="text" onChange={changeRoomID} value={roomID} />
-					<ModalButton disabled={disableBtn} clicked={submitJoinRoomHandler} icon="check">
+					<ModalButton disabled={disableBtn} clicked={submitJoinRoomHandler} icon="join">
 						Join
 					</ModalButton>
 				</div>

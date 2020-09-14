@@ -35,7 +35,6 @@ const Quiz = props => {
 		updateScore,
 		isHost,
 		duration,
-		history,
 	} = props;
 
 	useEffect(() => {

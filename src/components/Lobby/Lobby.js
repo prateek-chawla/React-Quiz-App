@@ -29,7 +29,7 @@ const Lobby = props => {
 		return () => {
 			socket.off("opponent_left");
 		};
-	}, [resetQuiz, setOpponentLeft]);
+	}, [resetQuiz, setOpponentLeft, redirectedFromQuiz]);
 
 	const createRoomClicked = () => {
 		setShowCreateRoom(true);

@@ -1,13 +1,14 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faCopy } from "@fortawesome/free-solid-svg-icons";
+import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
+import { faCopy } from "@fortawesome/free-regular-svg-icons";
 
 import { joinClasses } from "../../../../utils/general";
 import styles from "./Button.module.css";
 
 const Button = props => {
 	const icons = {
-		check: faCheck,
+		join: faSignInAlt,
 		copy: faCopy,
 	};
 

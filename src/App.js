@@ -4,9 +4,8 @@ import { Route, Switch, Redirect } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import Lobby from "./components/Lobby/Lobby";
 import Quiz from "./components/Quiz/Quiz";
-import Result from "./components/Result/Result";
 
-const App = props => {
+const App = () => {
 	return (
 		<Layout>
 			<Switch>
