@@ -13,9 +13,13 @@ import io from "socket.io-client";
 import reducer from "./store/reducers/reducer";
 
 const socketURL =
-	process.env.NODE_ENV === "production" ? window.location.hostname : "http://localhost:4001";
+	process.env.NODE_ENV === "production"
+		? "https://quizit-pc.herokuapp.com"
+		: "http://localhost:4001";
 
-export const socket = io.connect(socketURL);
+export const socket = io.connect(socketURL, {
+	transports: ["websocket","polling"],
+});
 
 const store = createStore(reducer, devToolsEnhancer());
 
