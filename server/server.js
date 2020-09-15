@@ -42,7 +42,6 @@ io.on("connection", socket => {
 	});
 
 	socket.on("submit_answer", answer => {
-		console.log("Transport : ",socket.conn.transport.name);
 		const player = socket.id;
 		const quiz = quizManager.getQuiz(socket.quizRoom);
 		if (quiz) {

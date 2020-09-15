@@ -21,6 +21,7 @@ const Quiz = props => {
 	const [showResults, setShowResults] = useState(false);
 
 	const fetchMoreQuestionsTimeout = useRef(null);
+	const pingIntervalRef = useRef(null);
 	const timerRef = useRef(null);
 	const quesNumberRef = useRef(0);
 	const myScoreRef = useRef(null);
@@ -28,19 +29,17 @@ const Quiz = props => {
 
 	const playerID = socket.id;
 	const { appear, appearActive, enter, enterActive, exit, exitActive } = styles;
-	const {
-		quizInProgress,
-		setOpponentLeft,
-		endQuiz,
-		updateScore,
-		isHost,
-		duration,
-	} = props;
+	const { quizInProgress, setOpponentLeft, endQuiz, updateScore, isHost, duration } = props;
 
 	useEffect(() => {
 		if (!quizInProgress) setHomeRedirect(true);
 
 		if (isHost) getNextQuestion();
+
+		// Keep Connection Alive, Ping every 15s => Avoid Heroku Timeout
+		pingIntervalRef.current = setInterval(() => {
+			socket.emit("ping");
+		}, 15000);
 
 		socket.on("next_question", response => {
 			if (response.status === "Success") {
@@ -74,6 +73,7 @@ const Quiz = props => {
 			socket.off("next_question");
 			socket.off("update_score");
 			clearTimeout(fetchMoreQuestionsTimeout.current);
+			clearInterval(pingIntervalRef.current);
 		};
 		//eslint-disable-next-line
 	}, []);
